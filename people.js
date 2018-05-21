@@ -14,7 +14,7 @@ module.exports = function(){
     }
 
     function getPeople(res, mysql, context, complete){
-        mysql.pool.query("SELECT bsg_people.id, fname, lname, bsg_planets.name AS homeworld, age FROM bsg_people INNER JOIN bsg_planets ON homeworld = bsg_planets.id", function(error, results, fields){
+        mysql.pool.query("SELECT character.id, fname, lname, role_id, dob FROM `character`", function(error, results, fields){
             if(error){
                 res.write(JSON.stringify(error));
                 res.end();
