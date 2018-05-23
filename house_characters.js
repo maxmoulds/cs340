@@ -2,18 +2,18 @@ module.exports = function(){
     var express = require('express');
     var router = express.Router();
 
-    //function getHouseStudents(res, mysql, context, house_id, complete){
-    //  var sql = "SELECT id, fname, lname FROM `character` WHERE house_id = ?";
-    //  var inserts = [house_id];
-    //    mysql.pool.query(sql, inserts, function(error, results, fields){
-    //        if(error){
-    //            res.write(JSON.stringify(error));
-    //            res.end();
-    //        }
-    //        context.character  = results;
-    //        complete();
-    //    });
-    //}
+    function getHouseStudents(res, mysql, context, house_id, complete){
+      var sql = "SELECT id, fname, lname FROM `character` WHERE house_id = ?";
+      var inserts = [house_id];
+        mysql.pool.query(sql, inserts, function(error, results, fields){
+            if(error){
+                res.write(JSON.stringify(error));
+                res.end();
+            }
+            context.character  = results;
+            complete();
+        });
+    }
 
     function getCharacters(res, mysql, context, complete){
         mysql.pool.query("SELECT id, fname, lname, role_id, dob FROM `character`", function(error, results, fields){
@@ -47,12 +47,12 @@ module.exports = function(){
         var context = {};
         context.jsscripts = ["deleteCharacter.js"];
         var mysql = req.app.get('mysql');
-        getCharacters(res, mysql, context, complete);
-        //getHouseStudents(res, mysql, context, house_id, complete);
+        //getCharacters(res, mysql, context, complete);
+        getHouseStudents(res, mysql, context, '1', complete);
         function complete(){
             callbackCount++;
             if(callbackCount >= 1){
-                res.render('character', context);
+                res.render('house_characters', context);
             }
 
         }
@@ -60,17 +60,17 @@ module.exports = function(){
 
     /* Display one person for the specific purpose of updating people */
 
-    router.get('/:id', function(req, res){
+    router.get('/:house_id', function(req, res){
         callbackCount = 0;
         var context = {};
         context.jsscripts = ["selectedplanet.js", "updateperson.js"];
         var mysql = req.app.get('mysql');
         getPerson(res, mysql, context, req.params.id, complete);
-        //getPlanets(res, mysql, context, req.params.house_id, complete);
+        getHouseCharacters(res, mysql, context, req.params.house_id, complete);
         function complete(){
             callbackCount++;
-            if(callbackCount >= 1){
-                res.render('character', context);
+            if(callbackCount >= 2){
+                res.render('house_characters', context);
             }
 
         }
