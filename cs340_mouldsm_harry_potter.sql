@@ -67,9 +67,11 @@ ALTER TABLE `class` AUTO_INCREMENT=10000; -- yay crns
 -- create the student_class_list table
 CREATE TABLE IF NOT EXISTS `student_class_list` (
   `character_id` int UNSIGNED NOT NULL DEFAULT 0, 
-  `class_id` int UNSIGNED NOT NULL DEFAULT 0, 
+  `class_id` int UNSIGNED NOT NULL DEFAULT 0,
+  UNIQUE INDEX testing (character_id, class_id),
   FOREIGN KEY (character_id) REFERENCES `character` (id) ON DELETE CASCADE,
   FOREIGN KEY (class_id) REFERENCES `class` (id) ON DELETE CASCADE
+  -- CONSTRAINT `fk_id` PRIMARY KEY (character_id,class_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- AND WE ARE DONE WITH CREATION, now constraints, default data, and some DELETES, INSERTS and others. 
