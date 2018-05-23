@@ -16,7 +16,7 @@ module.exports = function(){
     //}
 
     function getCharacters(res, mysql, context, complete){
-        mysql.pool.query("SELECT id, fname, lname, role_id, dob FROM `character`", function(error, results, fields){
+        mysql.pool.query("SELECT id, fname, lname, role_id, dob, house_id FROM `character`", function(error, results, fields){
             if(error){
                 res.write(JSON.stringify(error));
                 res.end();
@@ -65,7 +65,7 @@ module.exports = function(){
         var context = {};
         context.jsscripts = ["selectedplanet.js", "updateperson.js"];
         var mysql = req.app.get('mysql');
-        getPerson(res, mysql, context, req.params.id, complete);
+        getCharacter(res, mysql, context, req.params.id, complete);
         //getPlanets(res, mysql, context, req.params.house_id, complete);
         function complete(){
             callbackCount++;

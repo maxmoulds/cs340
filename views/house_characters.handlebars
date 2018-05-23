@@ -3,14 +3,13 @@
 {{this}}
 {{/each}}
 <h3>Show characters from a house:</h3>
-<form id="selecthouseid" action="/house_characters" method="post">
+<form id="selecthouseid" action="/house/{{house_id}}" method="POST">
     House ID: <select name="house_id"> 
         {{#each character}}
-        <option value="{{house_id}}">{{name}}</option>
+        <option value="{{house_id}}">{{house_id}}</option>
         {{/each}}
     </select><br>
-    Age: <input type="number" name="dob"><br>
-    <input type="submit" value="Submit">
+    <input type="submit" value="Show">
  </form>
 <br/>
 <h3>Current character:</h3>
@@ -18,8 +17,8 @@
     <thead> 
         <th>First Name</th> 
         <th>Last Name</th> 
-        <th>House ID</th>
-        <th>dob</th>  
+        <th>DOB</th>
+        <th>House ID</th>  
     </thead> 
     <tbody> 
         {{#each character}} 

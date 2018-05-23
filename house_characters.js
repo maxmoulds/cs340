@@ -3,7 +3,7 @@ module.exports = function(){
     var router = express.Router();
 
     function getHouseStudents(res, mysql, context, house_id, complete){
-      var sql = "SELECT id, fname, lname FROM `character` WHERE house_id = ?";
+      var sql = "SELECT id, fname, lname, dob, house_id FROM `character` WHERE house_id = ?";
       var inserts = [house_id];
         mysql.pool.query(sql, inserts, function(error, results, fields){
             if(error){
@@ -16,7 +16,7 @@ module.exports = function(){
     }
 
     function getCharacters(res, mysql, context, complete){
-        mysql.pool.query("SELECT id, fname, lname, role_id, dob FROM `character`", function(error, results, fields){
+        mysql.pool.query("SELECT id, fname, lname, role_id, dob, house_id FROM `character`", function(error, results, fields){
             if(error){
                 res.write(JSON.stringify(error));
                 res.end();
@@ -47,6 +47,22 @@ module.exports = function(){
         var context = {};
         context.jsscripts = ["deleteCharacter.js"];
         var mysql = req.app.get('mysql');
+        getCharacters(res, mysql, context, complete);
+        //getHouseStudents(res, mysql, context, req.body.house_id, complete);
+        function complete(){
+            callbackCount++;
+            if(callbackCount >= 1){
+                res.render('house_characters', context);
+            }
+
+        }
+    });
+
+    router.get('/:house_id', function(req, res){
+        var callbackCount = 0;
+        var context = {};
+        context.jsscripts = ["deleteCharacter.js"];
+        var mysql = req.app.get('mysql');
         //getCharacters(res, mysql, context, complete);
         getHouseStudents(res, mysql, context, '1', complete);
         function complete(){
@@ -58,39 +74,38 @@ module.exports = function(){
         }
     });
 
-    /* Display one person for the specific purpose of updating people */
-
-    router.get('/:house_id', function(req, res){
+    router.get('/:id', function(req, res){
         callbackCount = 0;
         var context = {};
         context.jsscripts = ["selectedplanet.js", "updateperson.js"];
         var mysql = req.app.get('mysql');
-        getPerson(res, mysql, context, req.params.id, complete);
-        getHouseCharacters(res, mysql, context, req.params.house_id, complete);
+        getCharacters(res, mysql, context, req.params.id, complete);
         function complete(){
             callbackCount++;
-            if(callbackCount >= 2){
-                res.render('house_characters', context);
+            if(callbackCount >= 1){
+                res.render('update-person', context);
             }
 
         }
     });
 
-    /* Adds a person, redirects to the people page after adding */
+    /* Display one person for the specific purpose of updating people */
+
 
     router.post('/', function(req, res){
-        console.log(req.body.homeworld)
+        console.log(req.body.house_id)
         console.log(req.body)
         var mysql = req.app.get('mysql');
-        var sql = "INSERT INTO `character` (fname, lname, dob, house_id) VALUES (?,?,?,?)";
-        var inserts = [req.body.fname, req.body.lname, req.body.homeworld, req.body.age];
+        var sql = "SELECT id, fname, lname, dob, house_id FROM `character` WHERE house_id = ?";
+        var inserts = [req.body.house_id];
         sql = mysql.pool.query(sql,inserts,function(error, results, fields){
             if(error){
                 console.log(JSON.stringify(error))
                 res.write(JSON.stringify(error));
                 res.end();
             }else{
-                res.redirect('/character');
+              //getHouseStudents(res, mysql, context, req.body.house_id, complete);
+               res.redirect('/character');
             }
         });
     });

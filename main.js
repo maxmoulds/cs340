@@ -19,6 +19,7 @@ app.set('mysql', mysql);
 app.use('/people_certs', require('./people_certs.js'));
 app.use('/character', require('./character.js'));
 app.use('/house_characters', require('./house_characters.js'));
+app.use('/house1', require('./house_characters.js'));
 app.use('/', express.static('public'));
 
 app.use(function(req,res){
