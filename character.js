@@ -80,7 +80,7 @@ module.exports = function(){
         console.log(req.body.homeworld)
         console.log(req.body)
         var mysql = req.app.get('mysql');
-        var sql = "INSERT INTO bsg_people (fname, lname, homeworld, age) VALUES (?,?,?,?)";
+        var sql = "INSERT INTO `character` (fname, lname, dob, house_id) VALUES (?,?,?,?)";
         var inserts = [req.body.fname, req.body.lname, req.body.homeworld, req.body.age];
         sql = mysql.pool.query(sql,inserts,function(error, results, fields){
             if(error){
@@ -88,7 +88,7 @@ module.exports = function(){
                 res.write(JSON.stringify(error));
                 res.end();
             }else{
-                res.redirect('/people');
+                res.redirect('/character');
             }
         });
     });
@@ -97,8 +97,8 @@ module.exports = function(){
 
     router.put('/:id', function(req, res){
         var mysql = req.app.get('mysql');
-        var sql = "UPDATE `character` SET fname=?, lname=?, homeworld=?, age=? WHERE id=?";
-        var inserts = [req.body.fname, req.body.lname, req.body.homeworld, req.body.age, req.params.id];
+        var sql = "UPDATE `character` SET fname=?, lname=?, dob=?, house_id=? role_id=? WHERE id=?";
+        var inserts = [req.body.fname, req.body.lname, req.body.dob, req.body.house_id, req.params.role_id, req.params.id];
         sql = mysql.pool.query(sql,inserts,function(error, results, fields){
             if(error){
                 res.write(JSON.stringify(error));
@@ -116,7 +116,7 @@ module.exports = function(){
         var mysql = req.app.get('mysql');
         var sql = "DELETE FROM `character` WHERE id = ?";
         var inserts = [req.params.id];
-        console.log("QUERY IS...", sql, req.params.id);
+        //console.log("QUERY IS...", sql, req.params.id);
         sql = mysql.pool.query(sql, inserts, function(error, results, fields){
             if(error){
                 res.write(JSON.stringify(error));
