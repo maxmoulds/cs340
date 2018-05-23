@@ -63,7 +63,7 @@ module.exports = function(){
     router.get('/:id', function(req, res){
         callbackCount = 0;
         var context = {};
-        context.jsscripts = ["selectedplanet.js", "updateperson.js"];
+        context.jsscripts = ["selectedplanet.js", "updatecharacter.js"];
         var mysql = req.app.get('mysql');
         getCharacter(res, mysql, context, req.params.id, complete);
         //getPlanets(res, mysql, context, req.params.house_id, complete);

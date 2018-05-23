@@ -61,7 +61,7 @@ module.exports = function(){
     router.get('/:house_id', function(req, res){
         var callbackCount = 0;
         var context = {};
-        context.jsscripts = ["selectedplanet.js", "updateperson.js"];
+        context.jsscripts = ["selectedplanet.js", "updatecharacter.js"];
         var mysql = req.app.get('mysql');
         //getCharacters(res, mysql, context, complete);
         getHouseStudents(res, mysql, context, req.params.house_id, complete);
@@ -77,13 +77,13 @@ module.exports = function(){
     router.get('/:id', function(req, res){
         callbackCount = 0;
         var context = {};
-        context.jsscripts = ["selectedplanet.js", "updateperson.js"];
+        context.jsscripts = ["selectedplanet.js", "updatecharacter.js"];
         var mysql = req.app.get('mysql');
         getCharacters(res, mysql, context, req.params.id, complete);
         function complete(){
             callbackCount++;
             if(callbackCount >= 1){
-                res.render('update-person', context);
+                res.render('update-character', context);
             }
 
         }

@@ -1,5 +1,5 @@
 <html>
-<h1>Update {{person.fname}} {{character.lname}}:</h1>
+<h1>Update {{character.fname}} {{character.lname}}:</h1>
 <form id="update-person" action="/character" method="post">
     First name: <input type="text" name="fname" value="{{character.fname}}"><br>
     Last name: <input type="text" name="lname" value="{{character.lname}}"><br>
@@ -10,6 +10,6 @@
     </select><br>
     Age: <input type="number" name="dob" value="{{character.dob}}"><br>
 </form>
-<button onclick="updatePerson({{character.id}})">Update</button>
+<button onclick="updateCharacter({{character.id}})">Update</button>
 <script defer>selectPlanet({{character.house_id}});</script>
 </html>

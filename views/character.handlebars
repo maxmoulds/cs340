@@ -6,12 +6,12 @@
 <form id="addperson" action="/character" method="post">
     First name: <input type="text" name="fname"><br>
     Last name: <input type="text" name="lname"><br>
-    Role: <select name="homeworld"> 
-        {{#each planets}}
-        <option value="{{id}}">{{name}}</option>
+    Role: <select name="role_id"> 
+        {{#each character}}
+        <option value="{{role_id}}">{{role_id}}</option>
         {{/each}}
     </select><br>
-    Age: <input type="number" name="age"><br>
+    Age: <input type="number" name="dob"><br>
     <input type="submit" value="Submit">
  </form>
 <br/>
@@ -28,8 +28,8 @@
         <tr> 
             <td>{{fname}}</td> 
             <td>{{lname}}</td> 
-            <td>{{homeworld}}</td> 
-            <td>{{age}}</td>
+            <td>{{house_id}}</td> 
+            <td>{{dob}}</td>
             <td><button onclick="deleteCharacter({{id}})">Delete</button></td>
             <td><a href="/character/{{id}}">Update</a></td>
         </tr> 
