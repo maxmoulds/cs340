@@ -105,7 +105,7 @@ module.exports = function(){
                 res.end();
             }else{
               //getHouseStudents(res, mysql, context, req.body.house_id, complete);
-               res.redirect('/character');
+               res.redirect('/house/' + req.body.house_id);
             }
         });
     });
