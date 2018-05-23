@@ -13,26 +13,27 @@ module.exports = function(){
         });
     }
 
-    function getPeople(res, mysql, context, complete){
-        mysql.pool.query("SELECT character.id, fname, lname, role_id, dob FROM `character`", function(error, results, fields){
+    function getCharacters(res, mysql, context, complete){
+        mysql.pool.query("SELECT id, fname, lname, role_id, dob FROM `character`", function(error, results, fields){
             if(error){
                 res.write(JSON.stringify(error));
                 res.end();
             }
-            context.people = results;
+            //console.log('this.sql', mysql.pool.query);
+            context.character = results;
             complete();
         });
     }
 
-    function getPerson(res, mysql, context, id, complete){
-        var sql = "SELECT id, fname, lname, homeworld, age FROM bsg_people WHERE id = ?";
+    function getCharacter(res, mysql, context, id, complete){
+        var sql = "SELECT id, fname, lname, dob FROM `character` WHERE id = ?";
         var inserts = [id];
         mysql.pool.query(sql, inserts, function(error, results, fields){
             if(error){
                 res.write(JSON.stringify(error));
                 res.end();
             }
-            context.person = results[0];
+            context.character = results[0];
             complete();
         });
     }
@@ -42,14 +43,14 @@ module.exports = function(){
     router.get('/', function(req, res){
         var callbackCount = 0;
         var context = {};
-        context.jsscripts = ["deleteperson.js"];
+        context.jsscripts = ["deleteCharacter.js"];
         var mysql = req.app.get('mysql');
-        getPeople(res, mysql, context, complete);
+        getCharacters(res, mysql, context, complete);
         getPlanets(res, mysql, context, complete);
         function complete(){
             callbackCount++;
             if(callbackCount >= 2){
-                res.render('people', context);
+                res.render('character', context);
             }
 
         }
@@ -96,7 +97,7 @@ module.exports = function(){
 
     router.put('/:id', function(req, res){
         var mysql = req.app.get('mysql');
-        var sql = "UPDATE bsg_people SET fname=?, lname=?, homeworld=?, age=? WHERE id=?";
+        var sql = "UPDATE `character` SET fname=?, lname=?, homeworld=?, age=? WHERE id=?";
         var inserts = [req.body.fname, req.body.lname, req.body.homeworld, req.body.age, req.params.id];
         sql = mysql.pool.query(sql,inserts,function(error, results, fields){
             if(error){
@@ -113,8 +114,9 @@ module.exports = function(){
 
     router.delete('/:id', function(req, res){
         var mysql = req.app.get('mysql');
-        var sql = "DELETE FROM bsg_people WHERE id = ?";
+        var sql = "DELETE FROM `character` WHERE id = ?";
         var inserts = [req.params.id];
+        console.log("QUERY IS...", sql, req.params.id);
         sql = mysql.pool.query(sql, inserts, function(error, results, fields){
             if(error){
                 res.write(JSON.stringify(error));
