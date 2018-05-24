@@ -10,14 +10,14 @@ module.exports = function(){
         res.write(JSON.stringify(error));
         res.end();
       }
-      context.items = results;
+      context.inventory = results;
       complete();
     });
   }
 
   /* get all owners of an item... to populate in dropdown */
   function getItemOwners(res, mysql, context, item_id, complete){
-    var sql = "SELECT character_id, amount_of, item_id, FROM `item_list` WHERE item_id = ?";
+    var sql = "SELECT C.id, C.fname, C.lname, I.name, IL.amount_of, I.description FROM `character` C INNER JOIN`item_list` IL ON C.id = IL.character_id INNER JOIN `items` I ON IL.item_id =I.id WHERE I.id = ? ";
     var inserts = [item_id];  
     mysql.pool.query(sql, inserts, function(error, results, fields){
       if(error){
@@ -29,11 +29,24 @@ module.exports = function(){
     }); 
   }
 
-  /* get all items belonging to a character. (uses items_lists) */
-  function getInventory(res, mysql, context, character_id, complete){
-    var sql = "SELECT item_id, amount_of FROM `items_list` WHERE character_id = ?";
-    var inserts = [character_id];
+  /* get all items. (uses items_lists) */
+  function getAllInventory(res, mysql, context, character_id, complete){
+    var sql = "SELECT C.fname, C.lname, I.name, IL.amount_of, I.description FROM `character` C INNER JOIN`item_list` IL ON C.id = IL.character_id INNER JOIN `items` I ON IL.item_id =I.id ";
     mysql.pool.query(sql, function(error, results, fields){
+      if(error){
+        res.write(JSON.stringify(error));
+        res.end();
+      }   
+      context.inventory = results;
+      complete();
+    }); 
+  }
+
+  /* get all items. (uses items_lists) */
+  function getCharacterInventory(res, mysql, context, character_id, complete){
+    var sql = "SELECT C.fname, C.lname, I.name, IL.amount_of, I.description FROM `character` C INNER JOIN`item_list` IL ON C.id = IL.character_id INNER JOIN `items` I ON IL.item_id =I.id WHERE C.id = ? "; 
+    var inserts = [character_id];
+     mysql.pool.query(sql, inserts, function(error, results, fields){
       if(error){
         res.write(JSON.stringify(error));
         res.end();
@@ -48,18 +61,46 @@ module.exports = function(){
     var context = {};
     context.jsscripts = ["deletecharacter.js"];
     var mysql = req.app.get('mysql');
-    var handlebars_file = 'items'
-
-    getPeople(res, mysql, context, complete);
-  getCertificates(res, mysql, context, complete);
-  getPeopleWithCertificates(res, mysql, context, complete);
+    var handlebars_file = 'items';
+    getItems(res, mysql, context, complete);
   function complete(){
     callbackCount++;
-    if(callbackCount >= 3){
+    if(callbackCount >= 1){
       res.render(handlebars_file, context);
     }
   }
   });
+
+    router.get('/c/:character_id', function(req, res){
+        var callbackCount = 0;
+        var context = {}; 
+        context.jsscripts = ["selectedplanet.js", "updatecharacter.js"];
+        var mysql = req.app.get('mysql');
+        //getCharacters(res, mysql, context, complete);
+        getCharacterInventory(res, mysql, context, req.params.character_id, complete);
+        function complete(){
+            callbackCount++;
+            if(callbackCount >= 1){ 
+                res.render('items', context);
+            }   
+        }   
+    });
+
+
+    router.get('/info/:item_id', function(req, res){
+        var callbackCount = 0;
+        var context = {}; 
+        context.jsscripts = ["selectedplanet.js", "updatecharacter.js"];
+        var mysql = req.app.get('mysql');
+        getItemOwners(res, mysql, context, req.params.item_id, complete);
+        var handlebars_file = 'inventory'; 
+        function complete(){
+            callbackCount++;
+            if(callbackCount >= 1){ 
+                res.render(handlebars_file, context);
+            }   
+        }   
+    }); 
 
   /* Associate certificate or certificates with a person and 
    * then redirect to the people_with_certs page after adding 
@@ -85,7 +126,7 @@ module.exports = function(){
     }
   });
     } //for loop ends here 
-  res.redirect('/people_certs');
+  res.redirect('/items');
   });
 
   /* Delete a person's certification record */

@@ -21,6 +21,7 @@ app.use('/character', require('./character.js'));
 app.use('/house_characters', require('./house_characters.js'));
 app.use('/house', require('./house_characters.js'));
 app.use('/classes', require('./classes.js'));
+app.use('/items', require('./items.js'));
 app.use('/', express.static('public'));
 
 app.use(function(req,res){

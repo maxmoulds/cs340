@@ -28,11 +28,14 @@
         <th>Certificate</th> 
     </thead> 
     <tbody> 
-        {{#each inventory}} 
+        {{#each itemOwners}} 
         <tr> 
             <td>{{id}}</td> 
+            <td>{{fname}}</td>
+            <td>{{lname}}</td>
             <td>{{name}}</td>
-           <td>{{description}}</td> 
+            <td>{{amount_of}}</td>
+            <td>{{description}}</td>
             <td><button onclick="deletePeopleCert({{pid}},{{cid}})">Delete</button></td>
             <td><a href='#' onclick='javascript: alert("You can implement it just like the Add form.")'>Update</a></td>
         </tr>
