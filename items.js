@@ -30,7 +30,7 @@ module.exports = function(){
   }
 
   /* get all items belonging to a character. (uses items_lists) */
-  function getInventory(res, mysql, context, complete){
+  function getInventory(res, mysql, context, character_id, complete){
     var sql = "SELECT item_id, amount_of FROM `items_list` WHERE character_id = ?";
     var inserts = [character_id];
     mysql.pool.query(sql, function(error, results, fields){
