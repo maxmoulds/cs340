@@ -3,15 +3,15 @@
 {{this}}
 {{/each}}
 <div>
-<h3> Associate Certificate(s) with a Person </h3>
+<h3> Decide who owns which items </h3>
     <form id="add_people_certificates" action="/people_certs" method="post">
-    Person: <select name='pid'>
-        {{#each people}}
-          <option value='{{pid}}'>{{fname}} {{lname}}</option>
+    Character: <select name='pid'>
+        {{#each character}}
+          <option value='{{id}}'>{{fname}} {{lname}}</option>
         {{/each}}
     </select>
     <br>
-    Certificates:<sup>Multi-select</sup> <select multiple name="certs"> 
+    Items:<sup>Multi-select</sup> <select multiple name="certs"> 
         {{!-- We display title but the value that is submitted through the form is actually the certificate's id --}}
         {{#each certificates}}
         <option value="{{cid}}">{{title}}</option>
@@ -21,11 +21,12 @@
     </form>
 </div>
 <br/>
-<h3> List of People with their Certifications </h3>
+<h3> List of Characters with the items they own </h3>
 <table>
     <thead> 
-        <th>Name</th> 
-        <th>Certificate</th> 
+        <th>First Name</th> 
+        <th>Last Name</th>
+        <th>Item</th> 
     </thead> 
     <tbody> 
         {{#each itemOwners}} 
@@ -40,7 +41,7 @@
             <td><a href='#' onclick='javascript: alert("You can implement it just like the Add form.")'>Update</a></td>
         </tr>
         {{else}}
-        <b> No people with any certifications found! Grant some using the form. </b>
+        <b> No characters with any items were found! Give them some by using menu above. </b>
         {{/each}} 
 
     </tbody>
