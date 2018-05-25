@@ -4,14 +4,14 @@
 {{/each}}
 <div>
 <h3> Decide who owns which items </h3>
-    <form id="add_people_certificates" action="/people_certs" method="post">
-    Person: <select name='pid'>
-        {{#each people}}
-          <option value='{{pid}}'>{{fname}} {{lname}}</option>
+    <form id="add_people_certificates" action="/item_list" method="post">
+    Character: <select name='id'>
+        {{#each character}}
+          <option value='{{id}}'>{{fname}} {{lname}}</option>
         {{/each}}
     </select>
     <br>
-    Certificates:<sup>Multi-select</sup> <select multiple name="certs"> 
+    Items:<sup>Multi-select</sup> <select multiple name="certs"> 
         {{!-- We display title but the value that is submitted through the form is actually the certificate's id --}}
         {{#each certificates}}
         <option value="{{cid}}">{{title}}</option>
@@ -21,7 +21,7 @@
     </form>
 </div>
 <br/>
-<h3> List of People with their Certifications </h3>
+<h3> List of Items </h3>
 <table>
     <thead> 
         <th>ID</th> 
