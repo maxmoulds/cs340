@@ -53,6 +53,21 @@ module.exports = function(){
         });
     }
 
+    //--getHouses... Gets all the information from every house in the house table
+    // var sql = "SELECT id, name, location, color_primary, color_secondary, points FROM `house`"
+    function getHouses(res, mysql, context, complete){
+        var sql = "SELECT id, name, location, color_primary, color_secondary, points FROM `house`";
+        //var inserts = [id];
+        mysql.pool.query(sql, function(error, results, fields){
+            if(error){
+                res.write(JSON.stringify(error));
+                res.end();
+            }   
+            context.houses = results;
+            complete();
+        }); 
+    } 
+
     /*Display all people. Requires web based javascript to delete users with AJAX*/
 
     router.get('/', function(req, res){
@@ -61,10 +76,10 @@ module.exports = function(){
         context.jsscripts = ["deleteCharacter.js"];
         var mysql = req.app.get('mysql');
         getCharacters(res, mysql, context, complete);
-        //getHouseStudents(res, mysql, context, req.body.house_id, complete);
+        getHouses(res, mysql, context, complete);
         function complete(){
             callbackCount++;
-            if(callbackCount >= 1){
+            if(callbackCount >= 2){
                 res.render('house_characters', context);
             }
 
@@ -141,10 +156,10 @@ module.exports = function(){
     });
 
     /* Route to delete a person, simply returns a 202 upon success. Ajax will handle this. */
-
+    //--deleteHouse...
     router.delete('/:id', function(req, res){
         var mysql = req.app.get('mysql');
-        var sql = "DELETE FROM `character` WHERE id = ?";
+        var sql = "DELETE FROM `house` WHERE id = ?";
         var inserts = [req.params.id];
         //console.log("QUERY IS...", sql, req.params.id);
         sql = mysql.pool.query(sql, inserts, function(error, results, fields){
