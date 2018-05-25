@@ -73,25 +73,25 @@ module.exports = function(){
     });
 
     /* Display one person for the specific purpose of updating people */
-
+    //--getCharacter....
     router.get('/:id', function(req, res){
         callbackCount = 0;
         var context = {};
         context.jsscripts = ["selectedplanet.js", "updatecharacter.js"];
         var mysql = req.app.get('mysql');
         getCharacter(res, mysql, context, req.params.id, complete);
-        //getPlanets(res, mysql, context, req.params.house_id, complete);
         function complete(){
             callbackCount++;
             if(callbackCount >= 1){
                 res.render('character', context);
             }
-
         }
     });
 
     /* Adds a person, redirects to the people page after adding */
-
+    //--newCharacter...
+    // var sql = "INSERT INTO `character` (fname, lname, dob, house_id) VALUES ([fnameInput], [lnameInput], [dobInput], [house_idInput])"
+    //
     router.post('/', function(req, res){
         console.log(req.body.homeworld)
         console.log(req.body)
@@ -110,7 +110,10 @@ module.exports = function(){
     });
 
     /* The URI that update data is sent to in order to update a person */
-
+    //---updateCharacter...
+    // var sql = "UPDATE `character` SET fname=[fnameInput], lname=[lnameInput],
+    //   dob=[dobInput], house_id=[house_idInput] role_id=[role_idInput] 
+    //   WHERE id=[auto_incremented int]"
     router.put('/:id', function(req, res){
         var mysql = req.app.get('mysql');
         var sql = "UPDATE `character` SET fname=?, lname=?, dob=?, house_id=? role_id=? WHERE id=?";
@@ -127,22 +130,22 @@ module.exports = function(){
     });
 
     /* Route to delete a person, simply returns a 202 upon success. Ajax will handle this. */
-
-    //router.delete('/:id', function(req, res){
-    //    var mysql = req.app.get('mysql');
-    //    var sql = "DELETE FROM `character` WHERE id = ?";
-    //    var inserts = [req.params.id];
-    //    //console.log("QUERY IS...", sql, req.params.id);
-    //    sql = mysql.pool.query(sql, inserts, function(error, results, fields){
-    //        if(error){
-    //            res.write(JSON.stringify(error));
-    //            res.status(400);
-    //            res.end();
-    //        }else{
-    //            res.status(202).end();
-    //        }
-    //    })
-    //})
+   //--deleteCharacter....
+    router.delete('/:id', function(req, res){
+        var mysql = req.app.get('mysql');
+        var sql = "DELETE FROM `character` WHERE id = ?";
+        var inserts = [req.params.id];
+        //console.log("QUERY IS...", sql, req.params.id);
+        sql = mysql.pool.query(sql, inserts, function(error, results, fields){
+            if(error){
+                res.write(JSON.stringify(error));
+                res.status(400);
+                res.end();
+            }else{
+                res.status(202).end();
+            }
+        })
+    })
 
     return router;
 }();
