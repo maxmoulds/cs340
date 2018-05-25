@@ -40,6 +40,19 @@ module.exports = function(){
         }); 
     } 
 
+    function getHouseID(res, mysql, context, complete){
+      var sql = "SELECT DISTINCT house_id FROM `character`";
+      mysql.pool.query(sql, function(error, results, fields){
+            if(error){
+                res.write(JSON.stringify(error));
+                res.end();
+            }   
+            console.log('results are (role_ids) =', results);
+            context.all_house_ids = results;
+            complete();
+        }); 
+    }  
+
     function getCharacter(res, mysql, context, id, complete){
         var sql = "SELECT id, fname, lname, dob FROM `character` WHERE id = ?";
         var inserts = [id];
