@@ -47,7 +47,7 @@ module.exports = function(){
                 res.write(JSON.stringify(error));
                 res.end();
             }   
-            console.log('results are (role_ids) =', results);
+            console.log('results are (house_ids) =', results);
             context.all_house_ids = results;
             complete();
         }); 

@@ -2,19 +2,6 @@ module.exports = function(){
     var express = require('express');
     var router = express.Router();
 
-    //function getHouseStudents(res, mysql, context, house_id, complete){
-    //  var sql = "SELECT id, fname, lname FROM `character` WHERE house_id = ?";
-    //  var inserts = [house_id];
-    //    mysql.pool.query(sql, inserts, function(error, results, fields){
-    //        if(error){
-    //            res.write(JSON.stringify(error));
-    //            res.end();
-    //        }
-    //        context.character  = results;
-    //        complete();
-    //    });
-    //}
-
     function getCharacters(res, mysql, context, complete){
         mysql.pool.query("SELECT id, fname, lname, role_id, dob, house_id FROM `character`", function(error, results, fields){
             if(error){
@@ -41,7 +28,7 @@ module.exports = function(){
     }  
 
     function getCharacter(res, mysql, context, id, complete){
-        var sql = "SELECT id, fname, lname, dob FROM `character` WHERE id = ?";
+        var sql = "SELECT id, fname, lname, role_id, dob, house_id FROM `character` WHERE id = ?";
         var inserts = [id];
         mysql.pool.query(sql, inserts, function(error, results, fields){
             if(error){
@@ -49,6 +36,19 @@ module.exports = function(){
                 res.end();
             }
             context.character = results[0];
+            complete();
+        });
+    }
+
+    function getHouseID(res, mysql, context, complete){
+      var sql = "SELECT DISTINCT house_id FROM `character`";
+      mysql.pool.query(sql, function(error, results, fields){
+            if(error){
+                res.write(JSON.stringify(error));
+                res.end();
+            }
+            console.log('results are (house_ids) =', results);
+            context.all_house_ids = results;
             complete();
         });
     }
@@ -62,10 +62,11 @@ module.exports = function(){
         var mysql = req.app.get('mysql');
         getCharacters(res, mysql, context, complete);
         getRoleID(res, mysql, context, complete);
+        getHouseID(res, mysql, context, complete);
         //getHouseStudents(res, mysql, context, house_id, complete);
         function complete(){
             callbackCount++;
-            if(callbackCount >= 2){
+            if(callbackCount >= 3){
                 res.render('character', context);
             }
 
@@ -80,10 +81,12 @@ module.exports = function(){
         context.jsscripts = ["selectedplanet.js", "updatecharacter.js"];
         var mysql = req.app.get('mysql');
         getCharacter(res, mysql, context, req.params.id, complete);
+        getRoleID(res, mysql, context, complete);
+        getHouseID(res, mysql, context, complete);
         function complete(){
             callbackCount++;
-            if(callbackCount >= 1){
-                res.render('character', context);
+            if(callbackCount >= 3){
+                res.render('update-character', context);
             }
         }
     });
@@ -116,8 +119,8 @@ module.exports = function(){
     //   WHERE id=[auto_incremented int]"
     router.put('/:id', function(req, res){
         var mysql = req.app.get('mysql');
-        var sql = "UPDATE `character` SET fname=?, lname=?, dob=?, house_id=? role_id=? WHERE id=?";
-        var inserts = [req.body.fname, req.body.lname, req.body.dob, req.body.house_id, req.params.role_id, req.params.id];
+        var sql = "UPDATE `character` SET fname=?, lname=?, role_id=?, dob=?, house_id=? WHERE id=?";
+        var inserts = [req.body.fname, req.body.lname, req.body.role_id, req.body.dob, req.params.house_id, req.params.id];
         sql = mysql.pool.query(sql,inserts,function(error, results, fields){
             if(error){
                 res.write(JSON.stringify(error));

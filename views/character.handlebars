@@ -4,6 +4,7 @@
 {{/each}}
 <h3>Add new character:</h3>
 <form id="addperson" action="/character" method="post">
+    ID:  <input type="text" name="id"><br>
     First name: <input type="text" name="fname"><br>
     Last name: <input type="text" name="lname"><br>
     Role: <select name="role_id"> 
@@ -11,25 +12,34 @@
         <option value="{{role_id}}">{{role_id}}</option>
         {{/each}}
     </select><br>
-    Age: <input type="number" name="dob"><br>
+    DOB: <input type="number" name="dob"><br>
+    HouseID: <select name="house_id">
+         {{#each all_house_ids}}
+         <option value="{{house_id}}">{{house_id}}</option>
+         {{/each}} 
+   </select><br>
     <input type="submit" value="Submit">
  </form>
 <br/>
 <h3>Current character:</h3>
 <table>
     <thead> 
+        <th>ID</th> 
         <th>First Name</th> 
         <th>Last Name</th> 
         <th>Role</th>
-        <th>dob</th>  
+        <th>dob</th> 
+       <th>House ID</th> 
     </thead> 
     <tbody> 
         {{#each character}} 
-        <tr> 
+        <tr>
+            <td>{{id}}</td> 
             <td>{{fname}}</td> 
             <td>{{lname}}</td> 
-            <td>{{house_id}}</td> 
-            <td>{{dob}}</td>
+            <td>{{role_id}}</td>
+            <td>{{dob}}</td> 
+            <td>{{house_id}}</td>
             <td><button onclick="deleteCharacter({{id}})">Delete</button></td>
             <td><a href="/character/{{id}}">Update</a></td>
         </tr> 
