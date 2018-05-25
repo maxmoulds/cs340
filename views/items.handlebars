@@ -3,7 +3,7 @@
 {{this}}
 {{/each}}
 <div>
-<h3> Associate Certificate(s) with a Person </h3>
+<h3> Decide who owns which items </h3>
     <form id="add_people_certificates" action="/people_certs" method="post">
     Person: <select name='pid'>
         {{#each people}}
@@ -24,8 +24,9 @@
 <h3> List of People with their Certifications </h3>
 <table>
     <thead> 
+        <th>ID</th> 
         <th>Name</th> 
-        <th>Certificate</th> 
+        <th>Description</th>
     </thead> 
     <tbody> 
         {{#each inventory}} 
@@ -37,7 +38,7 @@
             <td><a href='#' onclick='javascript: alert("You can implement it just like the Add form.")'>Update</a></td>
         </tr>
         {{else}}
-        <b> No people with any certifications found! Grant some using the form. </b>
+        <b> No items have been found! Create some. </b>
         {{/each}} 
 
     </tbody>
