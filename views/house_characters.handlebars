@@ -18,8 +18,9 @@
     <thead> 
         <th>Name</th> 
         <th>Location</th> 
-        <th>color_primary</th>
-        <th>color_secondary</th>  
+        <th>Primary Color</th>
+        <th>Secondary Color</th>
+        <th>Points</th>
     </thead> 
     <tbody> 
         {{#each houses}} 
@@ -27,7 +28,7 @@
             <td>{{name}}</td> 
             <td>{{location}}</td> 
             <td>{{color_primary}}</td> 
-            <td>{{secondary_primary}}</td>
+            <td>{{color_secondary}}</td>
             <td>{{points}}</td>
             <td><button onclick="deleteCharacter({{id}})">Delete</button></td>
             <td><a href="/character/{{id}}">Update</a></td>
