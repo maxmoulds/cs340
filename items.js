@@ -71,7 +71,7 @@ module.exports = function(){
   }
   });
 
-    router.get('/c/:character_id', function(req, res){
+    router.get('/info/:character_id', function(req, res){
         var callbackCount = 0;
         var context = {}; 
         context.jsscripts = ["selectedplanet.js", "updatecharacter.js"];
@@ -87,7 +87,7 @@ module.exports = function(){
     });
 
 
-    router.get('/info/:item_id', function(req, res){
+    router.get('/inventory/:item_id', function(req, res){
         var callbackCount = 0;
         var context = {}; 
         context.jsscripts = ["selectedplanet.js", "updatecharacter.js"];

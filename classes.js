@@ -18,7 +18,7 @@ module.exports = function(){
   /* get all owners of an item... to populate in dropdown */
   function getCharacterClasses(res, mysql, context, character_id, complete){
     var sql = "SELECT class.id, class.description, class.instructor, class.instructor, class.subject FROM `class` INNER JOIN`student_class_list` ClassList ON class.id = ClassList.class_id WHERE ClassList.character_id = ?"
-    var inserts = [character_id];  
+      var inserts = [character_id];  
     mysql.pool.query(sql, inserts, function(error, results, fields){
       if(error){
         res.write(JSON.stringify(error));
@@ -38,37 +38,37 @@ module.exports = function(){
     var handlebars_file = 'courses';
 
     //getPeople(res, mysql, context, complete);
-  //getCertificates(res, mysql, context, complete);
-  //getPeopleWithCertificates(res, mysql, context, complete);
-  getClasses(res, mysql, context, complete);
-  function complete(){
-    callbackCount++;
-    if(callbackCount >= 1){
-      res.render(handlebars_file, context);
+    //getCertificates(res, mysql, context, complete);
+    //getPeopleWithCertificates(res, mysql, context, complete);
+    getClasses(res, mysql, context, complete);
+    function complete(){
+      callbackCount++;
+      if(callbackCount >= 1){
+        res.render(handlebars_file, context);
+      }
     }
-  }
   });
 
-    router.get('/:id', function(req, res){
-        callbackCount = 0;
-        var context = {}; 
-        context.jsscripts = ["selectedplanet.js", "updatecharacter.js"];
-        var mysql = req.app.get('mysql');
-        var handlebars_file = 'classes';
-        getCharacterClasses(res, mysql, context, req.params.id, complete);
-        function complete(){
-            callbackCount++;
-            if(callbackCount >= 1){ 
-                res.render(handlebars_file, context);
-            }   
+  //--getCharacterClasses...
+  router.get('/:id', function(req, res){
+    callbackCount = 0;
+    var context = {}; 
+    context.jsscripts = ["selectedplanet.js", "updatecharacter.js"];
+    var mysql = req.app.get('mysql');
+    var handlebars_file = 'classes';
+    getCharacterClasses(res, mysql, context, req.params.id, complete);
+    function complete(){
+      callbackCount++;
+      if(callbackCount >= 1){ 
+        res.render(handlebars_file, context);
+      }   
 
-        }   
-    }); 
+    }   
+  }); 
 
 
-  /* Associate certificate or certificates with a person and 
-   * then redirect to the people_with_certs page after adding 
-   */
+  
+  
   router.post('/', function(req, res){
     console.log("We get the multi-select certificate dropdown as ", req.body.certs)
     var mysql = req.app.get('mysql');
