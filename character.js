@@ -99,8 +99,8 @@ module.exports = function(){
         console.log(req.body.homeworld)
         console.log(req.body)
         var mysql = req.app.get('mysql');
-        var sql = "INSERT INTO `character` (fname, lname, dob, house_id) VALUES (?,?,?,?)";
-        var inserts = [req.body.fname, req.body.lname, req.body.homeworld, req.body.age];
+        var sql = "INSERT INTO `character` (fname, lname, role_id, dob, house_id) VALUES (?,?,?,?,?)";
+        var inserts = [req.body.fname, req.body.lname, req.body.role_id, req.body.dob, req.body.house_id];
         sql = mysql.pool.query(sql,inserts,function(error, results, fields){
             if(error){
                 console.log(JSON.stringify(error))
