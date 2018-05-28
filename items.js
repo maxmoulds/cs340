@@ -44,7 +44,7 @@ module.exports = function(){
 
   /* get all items. (uses items_lists) */
   function getCharacterInventory(res, mysql, context, character_id, complete){
-    var sql = "SELECT I.id AS item_id, C.fname, C.lname, I.name, IL.amount_of, I.description FROM `character` C INNER JOIN`item_list` IL ON C.id = IL.character_id INNER JOIN `items` I ON IL.item_id =I.id WHERE C.id = ? "; 
+    var sql = "SELECT I.id AS item_id, C.id AS character_id, C.fname, C.lname, I.name, IL.amount_of, I.description FROM `character` C INNER JOIN`item_list` IL ON C.id = IL.character_id INNER JOIN `items` I ON IL.item_id =I.id WHERE C.id = ? "; 
     var inserts = [character_id];
     mysql.pool.query(sql, inserts, function(error, results, fields){
       if(error){
@@ -74,7 +74,7 @@ module.exports = function(){
   router.get('/info/:character_id', function(req, res){
     var callbackCount = 0;
     var context = {}; 
-    context.jsscripts = ["deleteCharacter.js", "updatecharacter.js"];
+    context.jsscripts = ["deleteCharacter.js", "updatecharacter.js", "updateinventory.js", "updateitem.js"];
     var mysql = req.app.get('mysql');
     //getCharacters(res, mysql, context, complete);
     getCharacterInventory(res, mysql, context, req.params.character_id, complete);
@@ -86,6 +86,20 @@ module.exports = function(){
     }   
   });
 
+  router.get('/info/:character_id/update/:item_id/:amount_of', function(req, res){
+    var callbackCount = 0;
+    var context = {}; 
+    context.jsscripts = ["deleteCharacter.js", "updatecharacter.js", "updateinventory.js", "updateitem.js"];
+    var mysql = req.app.get('mysql');
+    //getCharacters(res, mysql, context, complete);
+    getCharacterInventory(res, mysql, context, req.params.character_id, complete);
+    function complete(){
+      callbackCount++;
+      if(callbackCount >= 1){ 
+        res.render('update-items', context);
+      }   
+    }   
+  }); 
 
   router.get('/inventory/:item_id', function(req, res){
     var callbackCount = 0;
@@ -139,10 +153,10 @@ module.exports = function(){
     // var sql = "UPDATE `character` SET fname=[fnameInput], lname=[lnameInput],
     //   dob=[dobInput], house_id=[house_idInput] role_id=[role_idInput] 
     //   WHERE id=[auto_incremented int]"
-    router.put('/:item_id', function(req, res){
+    router.put('/info/:character_id/update/:item_id/:amount_of', function(req, res){
         var mysql = req.app.get('mysql');
-        var sql = "UPDATE `item` SET fname=?, lname=?, role_id=?, dob=?, house_id=? WHERE id=?";
-        var inserts = [req.body.fname, req.body.lname, req.body.role_id, req.body.dob, req.params.house_id, req.params.id];
+        var sql = "UPDATE `item_list` SET amount_of=?  WHERE character_id=? AND item_id=?";
+        var inserts = [req.body.amount_of, req.params.character_id, req.params.item_id];
         sql = mysql.pool.query(sql,inserts,function(error, results, fields){
             if(error){
                 res.write(JSON.stringify(error));

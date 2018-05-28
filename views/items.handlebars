@@ -25,6 +25,7 @@
         <th>Item ID</th> 
         <th>Item Name</th> 
         <th>Amount of</th>
+        <th>update qty</th>
         <th>Description</th>
     </thead> 
     <tbody> 
@@ -33,9 +34,15 @@
             <td>{{item_id}}</td> 
             <td>{{name}}</td>
             <td>{{amount_of}}</td>
+<td><form id="update-{{character_id}}-{{item_id}}"
+action="/items/info/{{character_id}}/update/{{item_id}}/{{new_amount_of}}" method="post">
+    new amount of: <input type="text" name="new_amount_of"><br>
+    <input type="submit" value="Submit">
+ </form>
+           </td>
            <td>{{description}}</td> 
             <td><button onclick="deleteItem({{character_id}},{{item_id}},{{amount_of}})">Delete</button></td>
-            <td><a href='#' onclick='javascript: alert("You can implement it just like the Add form.")'>Update</a></td>
+            <td><a href="/items/info/{{character_id}}/update/{{item_id}}/{{new_amount_of}}">Update</a></td>
         </tr>
         {{else}}
         <b> No items have been found! Create some. </b>
