@@ -44,7 +44,7 @@ module.exports = function(){
 
   /* get all items. (uses items_lists) */
   function getCharacterInventory(res, mysql, context, character_id, complete){
-    var sql = "SELECT C.fname, C.lname, I.name, IL.amount_of, I.description FROM `character` C INNER JOIN`item_list` IL ON C.id = IL.character_id INNER JOIN `items` I ON IL.item_id =I.id WHERE C.id = ? "; 
+    var sql = "SELECT I.id AS item_id, C.fname, C.lname, I.name, IL.amount_of, I.description FROM `character` C INNER JOIN`item_list` IL ON C.id = IL.character_id INNER JOIN `items` I ON IL.item_id =I.id WHERE C.id = ? "; 
     var inserts = [character_id];
     mysql.pool.query(sql, inserts, function(error, results, fields){
       if(error){

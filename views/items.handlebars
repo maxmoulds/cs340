@@ -22,17 +22,19 @@
 <h3> List of Items </h3>
 <table>
     <thead> 
-        <th>ID</th> 
-        <th>Name</th> 
+        <th>Item ID</th> 
+        <th>Item Name</th> 
+        <th>Amount of</th>
         <th>Description</th>
     </thead> 
     <tbody> 
         {{#each inventory}} 
         <tr> 
-            <td>{{id}}</td> 
+            <td>{{item_id}}</td> 
             <td>{{name}}</td>
+            <td>{{amount_of}}</td>
            <td>{{description}}</td> 
-            <td><button onclick="deletePeopleCert({{pid}},{{cid}})">Delete</button></td>
+            <td><button onclick="deleteCharacter({{character_id}},{{item_id}},{{amount_of}})">Delete</button></td>
             <td><a href='#' onclick='javascript: alert("You can implement it just like the Add form.")'>Update</a></td>
         </tr>
         {{else}}
