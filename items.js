@@ -4,7 +4,7 @@ module.exports = function(){
 
   /* get all items... to populate in dropdown */
   function getItems(res, mysql, context, complete){
-    var sql = "SELECT id, name, description FROM `items`";
+    var sql = "SELECT id AS item_id, name, description FROM `items`";
     mysql.pool.query(sql, function(error, results, fields){
       if(error){
         res.write(JSON.stringify(error));
@@ -31,7 +31,7 @@ module.exports = function(){
 
   /* get all items. (uses items_lists) */
   function getAllInventory(res, mysql, context, character_id, complete){
-    var sql = "SELECT C.fname, C.lname, I.name, IL.amount_of, I.description FROM `character` C INNER JOIN`item_list` IL ON C.id = IL.character_id INNER JOIN `items` I ON IL.item_id =I.id ";
+    var sql = "SELECT I.id AS item_id, C.fname, C.lname, I.name, IL.amount_of, I.description FROM `character` C INNER JOIN`item_list` IL ON C.id = IL.character_id INNER JOIN `items` I ON IL.item_id =I.id ";
     mysql.pool.query(sql, function(error, results, fields){
       if(error){
         res.write(JSON.stringify(error));
@@ -102,44 +102,71 @@ module.exports = function(){
     }   
   }); 
 
-  /* Associate certificate or certificates with a person and 
-   * then redirect to the people_with_certs page after adding 
-   */
-  router.post('/', function(req, res){
-    console.log("We get the multi-select certificate dropdown as ", req.body.certs)
-    var mysql = req.app.get('mysql');
-  // let's get out the certificates from the array that was submitted by the form 
-  var certificates = req.body.certs
-    var person = req.body.pid
-    for (let cert of certificates) {
-      console.log("Processing certificate id " + cert)
-    var sql = "INSERT INTO bsg_cert_people (pid, cid) VALUES (?,?)";
-  var inserts = [person, cert];
-  sql = mysql.pool.query(sql, inserts, function(error, results, fields){
-    if(error){
-      //TODO: send error messages to frontend as the following doesn't work
-      /* 
-         res.write(JSON.stringify(error));
-         res.end();
-         */
-      console.log(error)
-    }
-  });
-    } //for loop ends here 
-  res.redirect('/items');
-  });
+    router.post('/new', function(req, res){
+        console.log(req.body);
+        var mysql = req.app.get('mysql');
+        var sql = "INSERT INTO `items` (item_id, name, description) VALUES (?,?,?)";
+        var inserts = [req.body.item_id, req.body.name, req.body.description];
+        sql = mysql.pool.query(sql,inserts,function(error, results, fields){
+            if(error){
+                console.log(JSON.stringify(error))
+                res.write(JSON.stringify(error));
+                res.end();
+            }else{
+                res.redirect('/items');
+            }
+        });
+    });
+
+    router.post('/info/:character_id/add/:item_id/:amount_of', function(req, res){
+        console.log(req.body);
+        var mysql = req.app.get('mysql');
+        var sql = "INSERT INTO `item_list` (character_id, item_id, amount_of) VALUES (?,?,?)";
+        var inserts = [req.body.character_id, req.body.item_id, req.body.amount_of];
+        sql = mysql.pool.query(sql,inserts,function(error, results, fields){
+            if(error){
+                console.log(JSON.stringify(error))
+                res.write(JSON.stringify(error));
+                res.end();
+            }else{
+                res.redirect('/info/:character_id');
+            }   
+        }); 
+    }); 
+
+    /* The URI that update data is sent to in order to update a person */
+    //---updateCharacter...
+    // var sql = "UPDATE `character` SET fname=[fnameInput], lname=[lnameInput],
+    //   dob=[dobInput], house_id=[house_idInput] role_id=[role_idInput] 
+    //   WHERE id=[auto_incremented int]"
+    router.put('/:item_id', function(req, res){
+        var mysql = req.app.get('mysql');
+        var sql = "UPDATE `item` SET fname=?, lname=?, role_id=?, dob=?, house_id=? WHERE id=?";
+        var inserts = [req.body.fname, req.body.lname, req.body.role_id, req.body.dob, req.params.house_id, req.params.id];
+        sql = mysql.pool.query(sql,inserts,function(error, results, fields){
+            if(error){
+                res.write(JSON.stringify(error));
+                res.end();
+            }else{
+                res.status(200);
+                res.end();
+            }
+        });
+    });
+
+
 
   /* Delete a person's certification record */
   /* This route will accept a HTTP DELETE request in the form
    * /pid/{{pid}}/cert/{{cid}} -- which is sent by the AJAX form 
    */
-  router.delete('/pid/:pid/cert/:cid', function(req, res){
+  router.delete('/info/:character_id/:item_id/:amount_of', function(req, res){
     //console.log(req) //I used this to figure out where did pid and cid go in the request
-    console.log(req.params.pid)
-    console.log(req.params.cid)
+    console.log(req.params.character_id)
+    console.log(req.params.item_id)
     var mysql = req.app.get('mysql');
-  var sql = "DELETE FROM bsg_cert_people WHERE pid = ? AND cid = ?";
-  var inserts = [req.params.pid, req.params.cid];
+  var sql = "DELETE FROM `item_list` WHERE character_id = ? AND item_id = ?";
+  var inserts = [req.params.character_id, req.params.item_id];
   sql = mysql.pool.query(sql, inserts, function(error, results, fields){
     if(error){
       res.write(JSON.stringify(error));
