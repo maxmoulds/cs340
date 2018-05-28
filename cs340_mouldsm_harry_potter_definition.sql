@@ -93,7 +93,7 @@ INSERT INTO `character` (`id`, `fname`, `lname`, `role_id`, `dob`, `house_id`) V
 INSERT INTO `character` (`id`, `fname`, `lname`, `role_id`, `dob`, `house_id`) VALUES(951000004, 'Ned', 'Leadbetter', 1, 11081979, 1);
 INSERT INTO `character` (`id`, `fname`, `lname`, `role_id`, `dob`, `house_id`) VALUES(951000005, 'Firenze', '', 1, 01101920, 2);
 INSERT INTO `character` (`id`, `fname`, `lname`, `role_id`, `dob`, `house_id`) VALUES(951000006, 'Argus', 'Felcher', 3, 13091948, 0);
-INSERT INTO `character` (`id`, `fname`, `lname`, `role_id`, `dob`, `house_id`) VALUES(951000007, 'Cemydick', 'Digerree', 1, 03021978, 2);
+INSERT INTO `character` (`id`, `fname`, `lname`, `role_id`, `dob`, `house_id`) VALUES(951000007, 'Cemyick', 'Digerree', 1, 03021978, 2);
 INSERT INTO `character` (`id`, `fname`, `lname`, `role_id`, `dob`, `house_id`) VALUES(951000008, 'Chow', 'Change', 1, 99011978, 3);
 INSERT INTO `character` (`id`, `fname`, `lname`, `role_id`, `dob`, `house_id`) VALUES(951000009, 'Dracusinia', 'Malfoy', 4, 19121980, 4);
 INSERT INTO `items` (`id`, `name`, `description`) VALUES(102, 'Simple Robe', 'basic robe consisting of high quality ballistic kevlar and natural elk sinew');
@@ -103,7 +103,7 @@ INSERT INTO `items` (`id`, `name`, `description`) VALUES(100, 'Sickle', 'Unit of
 INSERT INTO `items` (`id`, `name`, `description`) VALUES(104, 'Berty Bots Every Flavor Bean - Booger', 'A booger that has been sold by a grifter to some easily manipulated children');
 INSERT INTO `class` (`id`, `subject`, `instructor`, `description`) VALUES(1, 'POTIONS 101', 951000005, 'And Introduction to Potions and other Potent Potables of the Magical Making');
 INSERT INTO `class` (`id`, `subject`, `instructor`, `description`) VALUES(2, 'ASTRONOMY 340', 951000005, 'Design and implementation of relational databases, including data modeling with ER or UML, diagrams, relational schema, SQL queries, relational algebra, user interfaces, and administration, ALL IN SPACE.');
-INSERT INTO `class` (`id`, `subject`, `instructor`, `description`) VALUES(3, 'CHARMS 261', 951000005, 'Getting fat on lucky charms');
+INSERT INTO `class` (`id`, `subject`, `instructor`, `description`) VALUES(3, 'CHARMS 261', 951000007, 'Getting fat on lucky charms');
 INSERT INTO `class` (`id`, `subject`, `instructor`, `description`) VALUES(4, 'TRANSFIGURATION 653', 951000005, 'Studying non-standard sexual dimorphisms that exist in the human species');
 INSERT INTO `student_class_list` (`character_id`, `class_id`) VALUES(951000001, 1);
 INSERT INTO `student_class_list` (`character_id`, `class_id`) VALUES(951000002, 1);

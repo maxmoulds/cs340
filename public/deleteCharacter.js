@@ -8,9 +8,9 @@ function deleteCharacter(id){
     })
 };
 
-function deletePeopleCert(pid, cid){
+function deleteItem(character_id, item_id, amount_of){
   $.ajax({
-      url: '/people_certs/pid/' + pid + '/cert/' + cid,
+      url: '/items/info/' + character_id + '/' + item_id + '/' + amount_of,
       type: 'DELETE',
       success: function(result){
           if(result.responseText != undefined){

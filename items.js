@@ -46,7 +46,7 @@ module.exports = function(){
   function getCharacterInventory(res, mysql, context, character_id, complete){
     var sql = "SELECT C.fname, C.lname, I.name, IL.amount_of, I.description FROM `character` C INNER JOIN`item_list` IL ON C.id = IL.character_id INNER JOIN `items` I ON IL.item_id =I.id WHERE C.id = ? "; 
     var inserts = [character_id];
-     mysql.pool.query(sql, inserts, function(error, results, fields){
+    mysql.pool.query(sql, inserts, function(error, results, fields){
       if(error){
         res.write(JSON.stringify(error));
         res.end();
@@ -63,44 +63,44 @@ module.exports = function(){
     var mysql = req.app.get('mysql');
     var handlebars_file = 'items';
     getItems(res, mysql, context, complete);
-  function complete(){
-    callbackCount++;
-    if(callbackCount >= 1){
-      res.render(handlebars_file, context);
+    function complete(){
+      callbackCount++;
+      if(callbackCount >= 1){
+        res.render(handlebars_file, context);
+      }
     }
-  }
   });
 
-    router.get('/info/:character_id', function(req, res){
-        var callbackCount = 0;
-        var context = {}; 
-        context.jsscripts = ["selectedplanet.js", "updatecharacter.js"];
-        var mysql = req.app.get('mysql');
-        //getCharacters(res, mysql, context, complete);
-        getCharacterInventory(res, mysql, context, req.params.character_id, complete);
-        function complete(){
-            callbackCount++;
-            if(callbackCount >= 1){ 
-                res.render('items', context);
-            }   
-        }   
-    });
+  router.get('/info/:character_id', function(req, res){
+    var callbackCount = 0;
+    var context = {}; 
+    context.jsscripts = ["selectedplanet.js", "updatecharacter.js"];
+    var mysql = req.app.get('mysql');
+    //getCharacters(res, mysql, context, complete);
+    getCharacterInventory(res, mysql, context, req.params.character_id, complete);
+    function complete(){
+      callbackCount++;
+      if(callbackCount >= 1){ 
+        res.render('items', context);
+      }   
+    }   
+  });
 
 
-    router.get('/inventory/:item_id', function(req, res){
-        var callbackCount = 0;
-        var context = {}; 
-        context.jsscripts = ["selectedplanet.js", "updatecharacter.js"];
-        var mysql = req.app.get('mysql');
-        getItemOwners(res, mysql, context, req.params.item_id, complete);
-        var handlebars_file = 'inventory'; 
-        function complete(){
-            callbackCount++;
-            if(callbackCount >= 1){ 
-                res.render(handlebars_file, context);
-            }   
-        }   
-    }); 
+  router.get('/inventory/:item_id', function(req, res){
+    var callbackCount = 0;
+    var context = {}; 
+    context.jsscripts = ["selectedplanet.js", "updatecharacter.js"];
+    var mysql = req.app.get('mysql');
+    getItemOwners(res, mysql, context, req.params.item_id, complete);
+    var handlebars_file = 'inventory'; 
+    function complete(){
+      callbackCount++;
+      if(callbackCount >= 1){ 
+        res.render(handlebars_file, context);
+      }   
+    }   
+  }); 
 
   /* Associate certificate or certificates with a person and 
    * then redirect to the people_with_certs page after adding 
@@ -150,6 +150,22 @@ module.exports = function(){
     }
   })
   })
+/* delete an item from a character. */
+    router.delete('/items/info/:character_id/:item_id/:amount_of', function(req, res){
+        var mysql = req.app.get('mysql');
+        var sql = "DELETE FROM `items_list` WHERE character_id = ?, item_id = ?";
+        var inserts = [req.params.character_id, req.params.item_id];
+        console.log("QUERY IS...", sql, req.params.character_id, req.params.item_id);
+        sql = mysql.pool.query(sql, inserts, function(error, results, fields){
+            if(error){
+                res.write(JSON.stringify(error));
+                res.status(400);
+                res.end();
+            }else{
+                res.status(202).end();
+            }   
+        })  
+    })  
 
   return router;
 }();
