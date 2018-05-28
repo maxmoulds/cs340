@@ -17,7 +17,7 @@ module.exports = function(){
 
   /* get all owners of an item... to populate in dropdown */
   function getItemOwners(res, mysql, context, item_id, complete){
-    var sql = "SELECT C.id, C.fname, C.lname, I.name, IL.amount_of, I.description FROM `character` C INNER JOIN`item_list` IL ON C.id = IL.character_id INNER JOIN `items` I ON IL.item_id =I.id WHERE I.id = ? ";
+    var sql = "SELECT C.id, C.fname, C.lname, I.id AS item_id, I.name, IL.amount_of, I.description FROM `character` C INNER JOIN`item_list` IL ON C.id = IL.character_id INNER JOIN `items` I ON IL.item_id =I.id WHERE I.id = ? ";
     var inserts = [item_id];  
     mysql.pool.query(sql, inserts, function(error, results, fields){
       if(error){
@@ -59,7 +59,7 @@ module.exports = function(){
   router.get('/', function(req, res){
     var callbackCount = 0;
     var context = {};
-    context.jsscripts = ["deletecharacter.js"];
+    context.jsscripts = ["deleteCharacter.js", "updatecharacter.js"];
     var mysql = req.app.get('mysql');
     var handlebars_file = 'items';
     getItems(res, mysql, context, complete);
@@ -74,7 +74,7 @@ module.exports = function(){
   router.get('/info/:character_id', function(req, res){
     var callbackCount = 0;
     var context = {}; 
-    context.jsscripts = ["selectedplanet.js", "updatecharacter.js"];
+    context.jsscripts = ["deleteCharacter.js", "updatecharacter.js"];
     var mysql = req.app.get('mysql');
     //getCharacters(res, mysql, context, complete);
     getCharacterInventory(res, mysql, context, req.params.character_id, complete);
@@ -90,7 +90,7 @@ module.exports = function(){
   router.get('/inventory/:item_id', function(req, res){
     var callbackCount = 0;
     var context = {}; 
-    context.jsscripts = ["selectedplanet.js", "updatecharacter.js"];
+    context.jsscripts = ["deleteCharacter.js", "updatecharacter.js"];
     var mysql = req.app.get('mysql');
     getItemOwners(res, mysql, context, req.params.item_id, complete);
     var handlebars_file = 'inventory'; 

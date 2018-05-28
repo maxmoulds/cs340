@@ -17,7 +17,7 @@ function deleteItem(character_id, item_id, amount_of){
             alert(result.responseText)
           }
           else {
-            window.location.reload(true)
+            window.location.reload(true); //'/items/info/' + character_id + '/' + item_id)
           } 
       }
   })
