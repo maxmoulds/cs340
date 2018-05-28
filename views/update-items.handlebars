@@ -1,0 +1,9 @@
+<html>
+<h1>Update {{character.fname}} {{character.lname}} - Item: {{name}}</h1>
+<form id="update-item"
+  action="/items/info/{{character_id}}/update/{{item_id}}/{{amount_of}}" method="post">
+    Amount of: <input type="text" name="amount_of" value="{{amount_of}}"><br>
+</form>
+<button onclick="updateItems({{character_id}},{{item_id}},{{amount_of}})">Update</button>
+<!-- <script defer>selectPlanet({{character.house_id}});</script> -->
+</html>
