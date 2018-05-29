@@ -10,8 +10,6 @@
   <li><a href='/house'>Houses</a></li>
   <li><a href='/items'>Items</a></li>
   <li><a href='/classes'>Classes</a></li>
-  <li><a href='/house_characters'>Characters displayed according to their house (1 to M relationship)</a></li>
-  <li><a href='/items_list'>A list of items owned by characters (N to M relationship)</a></li>
 </ul>
 <br>
 <p>E1 == Character</p>
@@ -22,13 +20,13 @@
 <ul>
 <li><a href='/'>Has at least 4 entities - E1,E2,E3 and E4 ?</a>(Character, House, Item, Class)</li>
 <li><a href='/items/inventory/102'>Has at least two entities in a many-to-many relationship R1?</a>Character<->Item</li>
-<li><a href='/character/951000005'>Your project has at least two entities in a one-to-many relationship R2?</a></li>
+<li><a href='/house_characters'>Your project has at least two entities in a one-to-many relationship R2?</a></li>
 <li><a href='/character'>Can show records from E1 ?</a></li>
 <li><a href='/items'>Can show records from E2 ?</a></li>
 <li><a href='/house'>Can show records from E3 ?</a></li>
 <li><a href='/classes'>Can show records from E4 ?</a></li>
 <li><a href='/items/inventory/102'>Can show records from the many-to-many relationship R2 ?</a></li>
-<li><a href='/items/info/951000003'>Can show records from the one-to-many relationship R1 ?</a></li>
+<li><a href='/house_characters'>Can show records from the one-to-many relationship R1 ?</a></li>
 <li><a href='/character'>Can add new records to E1 ?</a></li>
 <li><a href='/items'>Can add new records to E2 ?</a></li>
 <li><a href='/houses'>Can add new records to E3 ?</a></li>
@@ -42,8 +40,8 @@
 <li><a href='/items'>Can change association of rows between E2 and E2 in the many-to-many relationship?</a></li>
 <li><a href='/character'>Can associate any rows between E1 and E3 in the one-to-many relationship?</a></li>
 <li><a href='/character'>Can de-associate any rows between E1 and E3 in the one-to-many relationship?</a></li>
-<li><a href='/character'>Can search on at least one Entity's one attribute ?</a></li>
-<li><a href='/character'>Can filter on at least one Entity's one attribute ?</a></li>
+<li><a href='/house_characters'>Can search on at least one Entity's one attribute ?</a></li>
+<li><a href='/items/inventory/101'>Can filter on at least one Entity's one attribute ?</a></li>
 <li><a href='/character'>Can update details for E1 ?</a></li>
 <li><a href='/items'>Can update details for E2 ?</a></li>
 <li><a href='/house'>Can update details for E3 ?</a></li>
