@@ -14,6 +14,19 @@ module.exports = function(){
         });
     }
 
+    function getHouseCharacters(res, mysql, context, house_id, complete){
+      var sql = "SELECT id, fname, lname, dob, house_id FROM `character` WHERE house_id = ?";
+      var inserts = [house_id];
+        mysql.pool.query(sql, inserts, function(error, results, fields){
+            if(error){
+                res.write(JSON.stringify(error));
+                res.end();
+            }   
+            context.character  = results;
+            complete();
+        }); 
+    } 
+
     function getRoleID(res, mysql, context, complete){
       var sql = "SELECT DISTINCT role_id FROM `character`";
       mysql.pool.query(sql, function(error, results, fields){
@@ -26,6 +39,22 @@ module.exports = function(){
             complete();
         }); 
     }  
+
+    /* Find people whose fname starts with a given string in the req */
+    function getCharacterWithLastNameLike(req, res, mysql, context, complete) {
+      //sanitize the input as well as include the % character
+       var query = "SELECT character.character_id as id, fname, lname, dob, house_id FROM `character` WHERE lname LIKE " + mysql.pool.escape(req.params.s + '%');
+      console.log(query)
+
+      mysql.pool.query(query, function(error, results, fields){
+            if(error){
+                res.write(JSON.stringify(error));
+                res.end();
+            }
+            context.character = results;
+            complete();
+        });
+    }
 
     function getCharacter(res, mysql, context, id, complete){
         var sql = "SELECT id, fname, lname, role_id, dob, house_id FROM `character` WHERE id = ?";
@@ -72,6 +101,43 @@ module.exports = function(){
 
         }
     });
+
+
+    /*Display all people from a given homeworld. Requires web based javascript to delete users with AJAX*/
+    router.get('/filter/:house_id', function(req, res){
+        var callbackCount = 0;
+        var context = {};
+        context.jsscripts = ["deleteCharacter.js","filterCharacter.js","searchCharacter.js"];
+        var mysql = req.app.get('mysql');
+        //getHouseCharacter(req,res, mysql, context, complete);
+        getHouseCharacters(res, mysql, context, req.params.house_id, complete)
+        //getPlanets(res, mysql, context, complete);
+        function complete(){
+            callbackCount++;
+            if(callbackCount >= 1){
+                res.render('character', context);
+            }
+
+        }
+    });
+
+    /*Display all people whose name starts with a given string. Requires web based javascript to delete users with AJAX */
+    router.get('/search/:s', function(req, res){
+        var callbackCount = 0;
+        var context = {};
+        context.jsscripts = ["deleteCharacter.js","filterCharacter.js","searchCharacter.js"];
+        var mysql = req.app.get('mysql');
+        getCharacterWithLastNameLike(req, res, mysql, context, complete);
+        //getPlanets(res, mysql, context, complete);
+        function complete(){
+            callbackCount++;
+            if(callbackCount >= 1){
+                res.render('character', context);
+            }
+        }
+    });
+
+
 
     /* Display one person for the specific purpose of updating people */
     //--getCharacter....

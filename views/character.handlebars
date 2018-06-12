@@ -17,6 +17,17 @@
     <input type="submit" value="Submit">
  </form>
 <br/>
+
+
+<form id='search_people' action='' method=''>
+<!--- this form does not submit directly, the button handles all the interaction with backend -->
+    <label> Search people for first name starting with:</label>
+    <input id='first_name_search_string' type='text' name='first_name_search_string' value=''>
+    <input type="button" value="Search" onclick="searchPeopleByFirstName()">
+</form>
+
+
+
 <h3>Current character:</h3>
 <table>
     <thead> 

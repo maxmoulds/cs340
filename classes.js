@@ -33,7 +33,7 @@ module.exports = function(){
   router.get('/', function(req, res){
     var callbackCount = 0;
     var context = {};
-    context.jsscripts = ["deletecharacter.js"];
+    context.jsscripts = ["deletecharacter.js", "deleteClasses.js"];
     var mysql = req.app.get('mysql');
     var handlebars_file = 'courses';
 
@@ -53,7 +53,7 @@ module.exports = function(){
   router.get('/:id', function(req, res){
     callbackCount = 0;
     var context = {}; 
-    context.jsscripts = ["selectedplanet.js", "updatecharacter.js"];
+    context.jsscripts = ["selectedplanet.js", "updatecharacter.js", "deleteClasses.js"];
     var mysql = req.app.get('mysql');
     var handlebars_file = 'classes';
     getCharacterClasses(res, mysql, context, req.params.id, complete);
@@ -90,20 +90,18 @@ module.exports = function(){
     }
   });
     } //for loop ends here 
-  res.redirect('/people_certs');
+  res.redirect('/classes');
   });
 
-  /* Delete a person's certification record */
-  /* This route will accept a HTTP DELETE request in the form
-   * /pid/{{pid}}/cert/{{cid}} -- which is sent by the AJAX form 
-   */
-  router.delete('/pid/:pid/cert/:cid', function(req, res){
+  
+  // This deletes a character from a student_class_list. 
+  router.delete('/classes/del/:class_id/:character_id', function(req, res){
     //console.log(req) //I used this to figure out where did pid and cid go in the request
-    console.log(req.params.pid)
-    console.log(req.params.cid)
+    console.log(req.params.class_id)
+    console.log(req.params.character_id)
     var mysql = req.app.get('mysql');
-  var sql = "DELETE FROM bsg_cert_people WHERE pid = ? AND cid = ?";
-  var inserts = [req.params.pid, req.params.cid];
+  var sql = "DELETE FROM student_class_list WHERE class_id = ? AND character_id = ?";
+  var inserts = [req.params.class_id, req.params.character_id];
   sql = mysql.pool.query(sql, inserts, function(error, results, fields){
     if(error){
       res.write(JSON.stringify(error));
@@ -114,6 +112,25 @@ module.exports = function(){
     }
   })
   })
+
+  // This deletes a whole class and removes all associations. 
+  router.delete('/class/del/:class_id', function(req, res){
+    //console.log(req) //I used this to figure out where did pid and cid go in the request
+    console.log(req.params.class_id)
+    var mysql = req.app.get('mysql');
+  var sql = "DELETE FROM class WHERE id  = ?";
+  var inserts = [req.params.class_id];
+  sql = mysql.pool.query(sql, inserts, function(error, results, fields){
+    if(error){
+      res.write(JSON.stringify(error));
+      res.status(400); 
+      res.end(); 
+    }else{
+      res.status(202).end();
+    }   
+  })  
+  })
+
 
   return router;
 }();

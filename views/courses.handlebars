@@ -1,17 +1,15 @@
 <html>
-{{#each foo}}
-{{this}}
-{{/each}}
 <h3>Yo these are them classes:</h3>
 <form id="classtable" action="/classes" method="post">
-    First name: <input type="text" name="fname"><br>
+   Student ID: <input type="number" name="character_id"><br> 
+   First name: <input type="text" name="fname"><br>
     Last name: <input type="text" name="lname"><br>
     Role: <select name="role_id"> 
         {{#each all_role_ids}}
         <option value="{{role_id}}">{{role_id}}</option>
         {{/each}}
     </select><br>
-    Age: <input type="number" name="dob"><br>
+    Class ID: <input type="number" name="class_id"><br>
     <input type="submit" value="Submit">
  </form>
 <br/>
