@@ -4,7 +4,7 @@ module.exports = function(){
 
   /* get all items... to populate in dropdown */
   function getItems(res, mysql, context, complete){
-    var sql = "SELECT id AS item_id, name, description FROM `items`";
+    var sql = "SELECT id AS id, name, description FROM `items`"; //changed from SELECT id AS item_id to SELECT id AS id
     mysql.pool.query(sql, function(error, results, fields){
       if(error){
         res.write(JSON.stringify(error));
@@ -59,7 +59,7 @@ module.exports = function(){
   router.get('/', function(req, res){
     var callbackCount = 0;
     var context = {};
-    context.jsscripts = ["deleteCharacter.js", "updatecharacter.js"];
+    context.jsscripts = ["deleteItem.js"];
     var mysql = req.app.get('mysql');
     var handlebars_file = 'items';
     getItems(res, mysql, context, complete);
@@ -115,6 +115,42 @@ module.exports = function(){
       }   
     }   
   }); 
+
+  router.get('/:id', function(req, res){
+    var callbackCount = 0;
+    var context = {}; 
+    context.jsscripts = ["deleteCharacter.js", "updatecharacter.js"];
+    var mysql = req.app.get('mysql');
+    getItemOwners(res, mysql, context, req.params.item_id, complete);
+    var handlebars_file = 'inventory'; 
+    function complete(){
+      callbackCount++;
+      if(callbackCount >= 1){ 
+        res.render(handlebars_file, context);
+      }   
+    }   
+  }); 
+
+//below post added by Chase. Remove if not working.
+     /* Adds a person, redirects to the people page after adding */
+    //--newCharacter...
+    // var sql = "INSERT INTO `character` (fname, lname, dob, house_id) VALUES ([fnameInput], [lnameInput], [dobInput], [house_idInput])"
+    //
+    router.post('/', function(req, res){
+        console.log(req.body)
+        var mysql = req.app.get('mysql');
+        var sql = "INSERT INTO `items` (id, name, description) VALUES (?,?,?)";
+        var inserts = [req.body.id, req.body.name, req.body.description];
+        sql = mysql.pool.query(sql,inserts,function(error, results, fields){
+            if(error){
+                console.log(JSON.stringify(error))
+                res.write(JSON.stringify(error));
+                res.end();
+            }else{
+                res.redirect('/items');
+            }
+        });
+    });
 
     router.post('/new', function(req, res){
         console.log(req.body);
@@ -206,6 +242,24 @@ module.exports = function(){
                 res.status(202).end();
             }   
         })  
+    })
+
+    //If this works correctly it should delete an item from the items table
+      router.delete('/:id', function(req, res){
+      //console.log(req) //I used this to figure out where did pid and cid go in the request
+        console.log("hello");
+        var mysql = req.app.get('mysql');
+        var sql = "DELETE FROM `items` WHERE id = ?";
+        var inserts = [req.params.id];
+        sql = mysql.pool.query(sql, inserts, function(error, results, fields){
+          if(error){
+            res.write(JSON.stringify(error));
+            res.status(400); 
+            res.end(); 
+          }else{
+            res.status(202).end();
+          }
+        })
     })  
 
   return router;
