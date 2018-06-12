@@ -1,4 +1,5 @@
 function updateCharacter(id){
+	console.log("in updateCharacter");
     $.ajax({
         url: '/character/' + id,
         type: 'PUT',
