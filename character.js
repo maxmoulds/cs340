@@ -41,9 +41,9 @@ module.exports = function(){
     }  
 
     /* Find people whose fname starts with a given string in the req */
-    function getCharacterWithLastNameLike(req, res, mysql, context, complete) {
+    function getCharacterWithNameLike(req, res, mysql, context, complete) {
       //sanitize the input as well as include the % character
-       var query = "SELECT character.character_id as id, fname, lname, dob, house_id FROM `character` WHERE lname LIKE " + mysql.pool.escape(req.params.s + '%');
+       var query = "SELECT DISTINCT id, fname, lname, dob, house_id FROM `character` WHERE lname LIKE " + mysql.pool.escape(req.params.s + '%') + " OR fname LIKE " + mysql.pool.escape(req.params.s + '%');
       console.log(query)
 
       mysql.pool.query(query, function(error, results, fields){
@@ -87,7 +87,7 @@ module.exports = function(){
     router.get('/', function(req, res){
         var callbackCount = 0;
         var context = {};
-        context.jsscripts = ["deleteCharacter.js"];
+        context.jsscripts = ["deleteCharacter.js", "searchCharacter.js", "filterCharacter.js", "updateCharacter.js"];
         var mysql = req.app.get('mysql');
         getCharacters(res, mysql, context, complete);
         getRoleID(res, mysql, context, complete);
@@ -107,7 +107,7 @@ module.exports = function(){
     router.get('/filter/:house_id', function(req, res){
         var callbackCount = 0;
         var context = {};
-        context.jsscripts = ["deleteCharacter.js","filterCharacter.js","searchCharacter.js"];
+        context.jsscripts = ["deleteCharacter.js","filterCharacter.js","searchCharacter.js", "updateCharacter.js"];
         var mysql = req.app.get('mysql');
         //getHouseCharacter(req,res, mysql, context, complete);
         getHouseCharacters(res, mysql, context, req.params.house_id, complete)
@@ -125,9 +125,10 @@ module.exports = function(){
     router.get('/search/:s', function(req, res){
         var callbackCount = 0;
         var context = {};
-        context.jsscripts = ["deleteCharacter.js","filterCharacter.js","searchCharacter.js"];
+        context.jsscripts = ["searchCharacter.js", "filterCharacter.js", "deleteCharacter.js", "updateCharacter.js"];
         var mysql = req.app.get('mysql');
-        getCharacterWithLastNameLike(req, res, mysql, context, complete);
+        console.log("searching...");
+        getCharacterWithNameLike(req, res, mysql, context, complete);
         //getPlanets(res, mysql, context, complete);
         function complete(){
             callbackCount++;
@@ -144,11 +145,12 @@ module.exports = function(){
     router.get('/:id', function(req, res){
         callbackCount = 0;
         var context = {};
-        context.jsscripts = ["selectedplanet.js", "updatecharacter.js"];
+        context.jsscripts = ["deleteCharacter.js", "updateCharacter.js", "searchCharacter.js", "filterCharacter.js"];
         var mysql = req.app.get('mysql');
         getCharacter(res, mysql, context, req.params.id, complete);
         getRoleID(res, mysql, context, complete);
         getHouseID(res, mysql, context, complete);
+        console.log("Got the character info...");
         function complete(){
             callbackCount++;
             if(callbackCount >= 3){
@@ -183,10 +185,11 @@ module.exports = function(){
     // var sql = "UPDATE `character` SET fname=[fnameInput], lname=[lnameInput],
     //   dob=[dobInput], house_id=[house_idInput] role_id=[role_idInput] 
     //   WHERE id=[auto_incremented int]"
-    router.put('/:id', function(req, res){
+    router.put('/update/:id', function(req, res){
         var mysql = req.app.get('mysql');
         var sql = "UPDATE `character` SET fname=?, lname=?, role_id=?, dob=?, house_id=? WHERE id=?";
-        var inserts = [req.body.fname, req.body.lname, req.body.role_id, req.body.dob, req.params.house_id, req.params.id];
+        var inserts = [req.body.fname, req.body.lname, req.body.role_id, req.body.dob, req.body.new_house_id, req.params.id];
+        console.log("inserting/updating = "+ inserts + " " + req.params.house_id + " " + req.params.new_house_id);
         sql = mysql.pool.query(sql,inserts,function(error, results, fields){
             if(error){
                 res.write(JSON.stringify(error));

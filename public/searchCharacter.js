@@ -1,6 +1,7 @@
-function searchCharacterByFirstName() {
+function searchCharacterByName() {
     //get the first name 
-    var first_name_search_string  = document.getElementById('first_name_search_string').value
+    var name_search_string  = document.getElementById('name_search_string').value
     //construct the URL and redirect to it
-    window.location = '/character/search/' + encodeURI(first_name_search_string)
+    console.log("inside search in public/searchCharacter.js")
+    window.location = '/character/search/' + encodeURI(name_search_string)
 }

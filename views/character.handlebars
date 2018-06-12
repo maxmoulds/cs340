@@ -9,9 +9,9 @@
         {{/each}}
     </select><br>
     DOB: <input type="number" name="dob"><br>
-    HouseID: <select name="house_id">
+    HouseID: <select name="house_id" input type="number">
          {{#each all_house_ids}}
-         <option value="{{house_id}}">{{house_id}}</option>
+         <option value="{{character.house_id}}">{{house_id}}</option>
          {{/each}} 
    </select><br>
     <input type="submit" value="Submit">
@@ -19,11 +19,11 @@
 <br/>
 
 
-<form id='search_people' action='' method=''>
+<form id='search_character' action='' method=''>
 <!--- this form does not submit directly, the button handles all the interaction with backend -->
-    <label> Search people for first name starting with:</label>
-    <input id='first_name_search_string' type='text' name='first_name_search_string' value=''>
-    <input type="button" value="Search" onclick="searchPeopleByFirstName()">
+    <label> Search character by any name starting with:</label>
+    <input id='name_search_string' type='text' name='name_search_string' value=''>
+    <input type="button" value="Search" onclick="searchCharacterByName()">
 </form>
 
 
