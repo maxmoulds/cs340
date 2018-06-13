@@ -72,7 +72,7 @@ module.exports = function(){
   router.get('/', function(req, res){
     var callbackCount = 0;
     var context = {};
-    context.jsscripts = ["deleteItem.js"];
+    context.jsscripts = ["deleteCharacter.js", "updateCharacter.js", "deleteItem.js", "updateInventory.js", "updateItem.js"];
     var mysql = req.app.get('mysql');
     var handlebars_file = 'items';
     getItems(res, mysql, context, complete);
@@ -87,7 +87,7 @@ module.exports = function(){
   router.get('/info/:character_id', function(req, res){
     var callbackCount = 0;
     var context = {}; 
-    context.jsscripts = ["deleteCharacter.js", "updatecharacter.js", "updateinventory.js", "updateitem.js"];
+    context.jsscripts = ["deleteCharacter.js", "updateCharacter.js", "updateInventory.js", "updateItem.js"];
     var mysql = req.app.get('mysql');
     //getCharacters(res, mysql, context, complete);
     getCharacterInventory(res, mysql, context, req.params.character_id, complete);
@@ -102,7 +102,7 @@ module.exports = function(){
   router.get('/info/:character_id/update/:item_id/:amount_of', function(req, res){
     var callbackCount = 0;
     var context = {}; 
-    context.jsscripts = ["deleteCharacter.js", "updatecharacter.js", "updateinventory.js", "updateitem.js"];
+    context.jsscripts = ["deleteCharacter.js", "updateCharacter.js", "updateInventory.js", "updateItem.js"];
     var mysql = req.app.get('mysql');
     //getCharacters(res, mysql, context, complete);
     getCharacterInventory(res, mysql, context, req.params.character_id, complete);
@@ -117,7 +117,7 @@ module.exports = function(){
   router.get('/inventory/:item_id', function(req, res){
     var callbackCount = 0;
     var context = {}; 
-    context.jsscripts = ["deleteCharacter.js", "updatecharacter.js"];
+    context.jsscripts = ["deleteCharacter.js", "updateCharacter.js", "updateInventory.js", "updateItem.js"];
     var mysql = req.app.get('mysql');
     getItemOwners(res, mysql, context, req.params.item_id, complete);
     var handlebars_file = 'inventory'; 
@@ -132,7 +132,7 @@ module.exports = function(){
   router.get('/:id', function(req, res){
     var callbackCount = 0;
     var context = {}; 
-    context.jsscripts = ["updateitem.js"];
+    context.jsscripts = ["deleteCharacter.js", "updateCharacter.js", "updateInventory.js", "updateItem.js"];
     var mysql = req.app.get('mysql');
     getItem(res, mysql, context, req.params.id, complete);
     function complete(){
@@ -234,21 +234,22 @@ module.exports = function(){
         });
     });
 
-    // router.put('/:id', function(req, res){
-    //     var mysql = req.app.get('mysql');
-    //     var sql = "UPDATE `character` SET fname=?, lname=?, role_id=?, dob=?, house_id=? WHERE id=?";
-    //     var inserts = [req.body.fname, req.body.lname, req.body.role_id, req.body.dob, req.params.house_id, req.params.id];
-    //     sql = mysql.pool.query(sql,inserts,function(error, results, fields){
-    //         if(error){
-    //             res.write(JSON.stringify(error));
-    //             res.end();
-    //         }else{
-    //             res.status(200);
-    //             res.end();
-    //         }
-    //     });
-    // });
-
+//edit a single 
+    router.put('/update/:item_id', function(req, res){
+        var mysql = req.app.get('mysql');
+        var sql = "UPDATE `items` SET id=?, name=?, description=? WHERE id=?";
+        var inserts = [req.body.item_id, req.body.name, req.body.description, req.body.item_id];
+        console.log("inserting/updating = " + inserts);
+        sql = mysql.pool.query(sql,inserts,function(error, results, fields){
+            if(error){
+                res.write(JSON.stringify(error));
+                res.end();
+            }else{
+                res.status(200);
+                res.end();
+            }   
+        }); 
+    }); 
 
 
   /* Delete a person's certification record */

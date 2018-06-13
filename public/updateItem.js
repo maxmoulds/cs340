@@ -1,8 +1,8 @@
-function updateItems(id){
+function updateItem(item_id){
     $.ajax({
-        url: '/items/' + id,
+        url: '/items/update/' + item_id,
         type: 'PUT',
-        data: $('#update-items').serialize(),
+        data: $('#update-item').serialize(),
         success: function(result){
             window.location.replace("./");
         }

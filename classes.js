@@ -33,7 +33,7 @@ module.exports = function(){
   router.get('/', function(req, res){
     var callbackCount = 0;
     var context = {};
-    context.jsscripts = ["deletecharacter.js", "deleteClasses.js"];
+    context.jsscripts = ["deleteCharacter.js", "deleteClasses.js"];
     var mysql = req.app.get('mysql');
     var handlebars_file = 'courses';
 
@@ -53,7 +53,7 @@ module.exports = function(){
   router.get('/:id', function(req, res){
     callbackCount = 0;
     var context = {}; 
-    context.jsscripts = ["selectedplanet.js", "updatecharacter.js", "deleteClasses.js"];
+    context.jsscripts = ["deleteCharacter.js", "updateCharacter.js", "deleteClasses.js"];
     var mysql = req.app.get('mysql');
     var handlebars_file = 'classes';
     getCharacterClasses(res, mysql, context, req.params.id, complete);
