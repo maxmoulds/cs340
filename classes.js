@@ -67,40 +67,32 @@ module.exports = function(){
   }); 
 
 
+    router.post('/', function(req, res){
+        console.log(req.body.homeworld)
+        console.log(req.body)
+        var mysql = req.app.get('mysql');
+        var sql = "INSERT INTO `class` (id, subject, instructor, description) VALUES (?,?,?,?)";
+        var inserts = [req.body.id, req.body.subject, req.body.instructor, req.body.description];
+        sql = mysql.pool.query(sql,inserts,function(error, results, fields){
+            if(error){
+                console.log(JSON.stringify(error))
+                res.write(JSON.stringify(error));
+                res.end();
+            }else{
+                res.redirect('/classes');
+            }   
+        }); 
+    });   
   
-  
-  router.post('/', function(req, res){
-    console.log("We get the multi-select certificate dropdown as ", req.body.certs)
-    var mysql = req.app.get('mysql');
-  // let's get out the certificates from the array that was submitted by the form 
-  var certificates = req.body.certs
-    var person = req.body.pid
-    for (let cert of certificates) {
-      console.log("Processing certificate id " + cert)
-    var sql = "INSERT INTO bsg_cert_people (pid, cid) VALUES (?,?)";
-  var inserts = [person, cert];
-  sql = mysql.pool.query(sql, inserts, function(error, results, fields){
-    if(error){
-      //TODO: send error messages to frontend as the following doesn't work
-      /* 
-         res.write(JSON.stringify(error));
-         res.end();
-         */
-      console.log(error)
-    }
-  });
-    } //for loop ends here 
-  res.redirect('/classes');
-  });
 
   
   // This deletes a character from a student_class_list. 
-  router.delete('/classes/del/:class_id/:character_id', function(req, res){
+  router.delete('/class/del/:class_id/:character_id', function(req, res){
     //console.log(req) //I used this to figure out where did pid and cid go in the request
     console.log(req.params.class_id)
     console.log(req.params.character_id)
     var mysql = req.app.get('mysql');
-  var sql = "DELETE FROM student_class_list WHERE class_id = ? AND character_id = ?";
+  var sql = "DELETE FROM `student_class_list` WHERE class_id = ? AND character_id = ?";
   var inserts = [req.params.class_id, req.params.character_id];
   sql = mysql.pool.query(sql, inserts, function(error, results, fields){
     if(error){
@@ -118,7 +110,7 @@ module.exports = function(){
     //console.log(req) //I used this to figure out where did pid and cid go in the request
     console.log(req.params.class_id)
     var mysql = req.app.get('mysql');
-  var sql = "DELETE FROM class WHERE id  = ?";
+  var sql = "DELETE FROM `class` WHERE id  = ?";
   var inserts = [req.params.class_id];
   sql = mysql.pool.query(sql, inserts, function(error, results, fields){
     if(error){
