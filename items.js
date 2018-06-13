@@ -2,6 +2,19 @@ module.exports = function(){
   var express = require('express');
   var router = express.Router();
 
+  function getItem(res, mysql, context, id, complete){
+    var sql = "SELECT id, name, description FROM `items` WHERE items.id = ?";
+    var inserts = [id];
+    mysql.pool.query(sql, inserts, function(error, results, fields){
+      if(error){
+        res.write(JSON.stringify(error));
+        res.end();
+      }
+      context.item = results[0];
+      complete();
+    });
+  }
+
   /* get all items... to populate in dropdown */
   function getItems(res, mysql, context, complete){
     var sql = "SELECT id AS id, name, description FROM `items`"; //changed from SELECT id AS item_id to SELECT id AS id
@@ -119,14 +132,13 @@ module.exports = function(){
   router.get('/:id', function(req, res){
     var callbackCount = 0;
     var context = {}; 
-    context.jsscripts = ["deleteCharacter.js", "updatecharacter.js"];
+    context.jsscripts = ["updateitem.js"];
     var mysql = req.app.get('mysql');
-    getItemOwners(res, mysql, context, req.params.item_id, complete);
-    var handlebars_file = 'inventory'; 
+    getItem(res, mysql, context, req.params.id, complete);
     function complete(){
       callbackCount++;
       if(callbackCount >= 1){ 
-        res.render(handlebars_file, context);
+        res.render('update-items', context);
       }   
     }   
   }); 
@@ -203,6 +215,39 @@ module.exports = function(){
             }
         });
     });
+
+
+    router.put('/:id', function(req, res){
+        var mysql = req.app.get('mysql');
+        console.log(req.body);
+        var sql = "UPDATE `items` SET id=?, name=?, description=? WHERE id=?";
+
+        var inserts = [req.body.id, req.body.name, req.body.name, req.params.id];
+        sql = mysql.pool.query(sql,inserts,function(error, results, fields){
+            if(error){
+                res.write(JSON.stringify(error));
+                res.end();
+            }else{
+                res.status(200);
+                res.end();
+            }
+        });
+    });
+
+    // router.put('/:id', function(req, res){
+    //     var mysql = req.app.get('mysql');
+    //     var sql = "UPDATE `character` SET fname=?, lname=?, role_id=?, dob=?, house_id=? WHERE id=?";
+    //     var inserts = [req.body.fname, req.body.lname, req.body.role_id, req.body.dob, req.params.house_id, req.params.id];
+    //     sql = mysql.pool.query(sql,inserts,function(error, results, fields){
+    //         if(error){
+    //             res.write(JSON.stringify(error));
+    //             res.end();
+    //         }else{
+    //             res.status(200);
+    //             res.end();
+    //         }
+    //     });
+    // });
 
 
 
