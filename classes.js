@@ -88,7 +88,6 @@ module.exports = function(){
       if(callbackCount >= 1){ 
         res.render(handlebars_file, context);
       }   
-
     }   
   }); 
 
