@@ -1,25 +1,13 @@
 <html>
-<!--
-<div>
-<h3> Decide who owns which items </h3>
-    <form id="add_people_certificates" action="/people_certs" method="post">
-    Character: <select name='pid'>
-        {{#each character}}
-          <option value='{{id}}'>{{fname}} {{lname}}</option>
-        {{/each}}
-    </select>
-    <br>
-    Items:<sup>Multi-select</sup> <select multiple name="certs"> 
-        {{!-- We display title but the value that is submitted through the form is actually the certificate's id --}}
-        {{#each certificates}}
-        <option value="{{cid}}">{{title}}</option>
-        {{/each}}
-    </select><br>
+<h3>Change item {{itemOwners.name}}:</h3>
+<form id="update-item" action="/items" method="post">
+    ID:  <input type="text" name="id" value="{{itemOwners.item_id}}"><br>
+    Item name: <input type="text" name="name">{{itemOwners.name}}<br>
+    Description: <input type="text" name="description">{{itemOwners.description}}<br>
     <input type="submit" value="Submit">
-    </form>
-</div>
--->
+ </form>
 <br/>
+
 <h3> List of Characters with the items they own </h3>
 <table>
     <thead> 

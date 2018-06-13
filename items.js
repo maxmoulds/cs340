@@ -25,6 +25,9 @@ module.exports = function(){
         res.end();
       }   
       context.itemOwners = results;
+      context.itemID = item_id;
+      context.itemNAME = results[0].name;
+      context.itemDESC = results[0].description;
       complete();
     }); 
   }
@@ -59,7 +62,7 @@ module.exports = function(){
   router.get('/', function(req, res){
     var callbackCount = 0;
     var context = {};
-    context.jsscripts = ["deleteItem.js"];
+    context.jsscripts = ["deleteItem.js", "updateCharacter.js", "updateItem.js", "updateInventory.js"];
     var mysql = req.app.get('mysql');
     var handlebars_file = 'items';
     getItems(res, mysql, context, complete);
@@ -74,7 +77,7 @@ module.exports = function(){
   router.get('/info/:character_id', function(req, res){
     var callbackCount = 0;
     var context = {}; 
-    context.jsscripts = ["deleteCharacter.js", "updatecharacter.js", "updateinventory.js", "updateitem.js"];
+    context.jsscripts = ["deleteCharacter.js", "deleteItem.js", "updateCharacter.js", "updateInventory.js", "updateItem.js"];
     var mysql = req.app.get('mysql');
     //getCharacters(res, mysql, context, complete);
     getCharacterInventory(res, mysql, context, req.params.character_id, complete);
@@ -89,7 +92,7 @@ module.exports = function(){
   router.get('/info/:character_id/update/:item_id/:amount_of', function(req, res){
     var callbackCount = 0;
     var context = {}; 
-    context.jsscripts = ["deleteCharacter.js", "updatecharacter.js", "updateinventory.js", "updateitem.js"];
+    context.jsscripts = ["deleteCharacter.js", "updateCharacter.js", "updateInventory.js", "updateItem.js"];
     var mysql = req.app.get('mysql');
     //getCharacters(res, mysql, context, complete);
     getCharacterInventory(res, mysql, context, req.params.character_id, complete);
@@ -101,13 +104,15 @@ module.exports = function(){
     }   
   }); 
 
+  //List of Characters with the items they own but SHOULD BE list of ONE ITEM and all the characters that own it. 
   router.get('/inventory/:item_id', function(req, res){
     var callbackCount = 0;
     var context = {}; 
-    context.jsscripts = ["deleteCharacter.js", "updatecharacter.js"];
+    context.jsscripts = ["deleteCharacter.js", "updateCharacter.js", "updateItem.js", "updateInventory.js", "deleteItem.js"];
     var mysql = req.app.get('mysql');
     getItemOwners(res, mysql, context, req.params.item_id, complete);
     var handlebars_file = 'inventory'; 
+    console.log("this is really an inventory");
     function complete(){
       callbackCount++;
       if(callbackCount >= 1){ 
@@ -116,13 +121,15 @@ module.exports = function(){
     }   
   }); 
 
+  //what is this doing...
   router.get('/:id', function(req, res){
     var callbackCount = 0;
     var context = {}; 
-    context.jsscripts = ["deleteCharacter.js", "updatecharacter.js"];
+    context.jsscripts = ["deleteCharacter.js", "updateCharacter.js", "updateItem.js", "updateInventory.js", "deleteItem.js"];
     var mysql = req.app.get('mysql');
     getItemOwners(res, mysql, context, req.params.item_id, complete);
-    var handlebars_file = 'inventory'; 
+    var handlebars_file = 'items'; 
+    console.log("loading a list of items and NOT AN INVENTORY?");
     function complete(){
       callbackCount++;
       if(callbackCount >= 1){ 
@@ -204,6 +211,22 @@ module.exports = function(){
         });
     });
 
+//edit a single 
+    router.put('/inventory/update/:item_id', function(req, res){
+        var mysql = req.app.get('mysql');
+        var sql = "UPDATE `items` SET id=?, name=?, description=? WHERE id=?";
+        var inserts = [req.body.id, req.body.name, req.body.name, req.params.item_id];
+        console.log("inserting/updating = " + inserts);
+        sql = mysql.pool.query(sql,inserts,function(error, results, fields){
+            if(error){
+                res.write(JSON.stringify(error));
+                res.end();
+            }else{
+                res.status(200);
+                res.end();
+            }   
+        }); 
+    }); 
 
 
   /* Delete a person's certification record */

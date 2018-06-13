@@ -188,7 +188,7 @@ module.exports = function(){
     router.put('/update/:id', function(req, res){
         var mysql = req.app.get('mysql');
         var sql = "UPDATE `character` SET fname=?, lname=?, role_id=?, dob=?, house_id=? WHERE id=?";
-        var inserts = [req.body.fname, req.body.lname, req.body.role_id, req.body.dob, req.body.new_house_id, req.params.id];
+        var inserts = [req.body.fname, req.body.lname, req.body.role_id, req.body.dob, req.body.house_id, req.params.id];
         console.log("inserting/updating = "+ inserts + " " + req.params.house_id + " " + req.params.new_house_id);
         sql = mysql.pool.query(sql,inserts,function(error, results, fields){
             if(error){
