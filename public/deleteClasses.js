@@ -1,6 +1,6 @@
 function deleteClass(class_id){
     $.ajax({
-        url: '/class/del/' + class_id,
+        url: '/classes/class/del/' + class_id,
         type: 'DELETE',
         success: function(result){
             window.location.reload(true);
