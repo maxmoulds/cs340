@@ -43,6 +43,21 @@ module.exports = function(){
     }); 
   }
 
+  //Causes weird error with headings: "Error: Can't set headers after they are sent."
+  function getCharacterIDs(res, mysql, context, complete){
+    var sql = "SELECT id AS character_id FROM `character`";
+    mysql.pool.query(sql, function(error, results, fields){
+      if(error){
+        res.write(JSON.stringify(error));
+        res.end();
+      }
+      context.character_ids = results;
+      console.log("results:");
+      console.log(results);
+      complete();
+    });
+  }
+
 
   router.get('/', function(req, res){
     var callbackCount = 0;
@@ -50,14 +65,11 @@ module.exports = function(){
     context.jsscripts = ["deleteCharacter.js", "deleteClasses.js", "updateClass.js"];
     var mysql = req.app.get('mysql');
     var handlebars_file = 'classes';
-
-    //getPeople(res, mysql, context, complete);
-    //getCertificates(res, mysql, context, complete);
-    //getPeopleWithCertificates(res, mysql, context, complete);
+    getCharacterIDs(res, mysql, context, complete);
     getClasses(res, mysql, context, complete);
     function complete(){
       callbackCount++;
-      if(callbackCount >= 1){
+      if(callbackCount >= 2){
         res.render(handlebars_file, context);
       }
     }

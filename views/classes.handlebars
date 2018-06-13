@@ -1,36 +1,31 @@
 <html>
-{{#each foo}}
-{{this}}
-{{/each}}
-<h3>Yo these are them classes:</h3>
+<h3>ADD A NEW CLASS</h3>
 <form id="classtable" action="/classes" method="post">
-   Student ID: <input type="number" name="character_id"><br> 
-   First name: <input type="text" name="fname"><br>
-    Last name: <input type="text" name="lname"><br>
-    Role: <select name="role_id"> 
-        {{#each all_role_ids}}
-        <option value="{{role_id}}">{{role_id}}</option>
+   Subject: <input type="text" name="subject"><br>
+   Description: <input type="text" name="description"><br>
+   Role: <select name="instructor"> 
+        {{#each character_ids}}
+        <option value="{{character_id}}">{{character_id}}</option>
         {{/each}}
     </select><br>
-    Class ID: <input type="number" name="class_id"><br>
-    <input type="submit" value="Submit">
+   <input type="submit" value="Submit">
  </form>
 <br/>
-<h3>Current character Class list:</h3>
+<h3>LIST OF ALL CLASSES</h3>
 <table>
     <thead> 
-        <th>First Name</th> 
-        <th>Last Name</th> 
-        <th>Role</th>
-        <th>dob</th>  
+        <th>Class ID</th> 
+        <th>Subject</th>  
+        <th>Description</th> 
+        <th>Instructor</th>
     </thead> 
     <tbody> 
         {{#each courses}} 
         <tr> 
             <td>{{id}}</td> 
+            <td>{{subject}}</td>
             <td>{{description}}</td> 
             <td>{{instructor}}</td> 
-            <td>{{subject}}</td>
             <td><button onclick="deleteClass({{id}})">Delete</button></td>
             <td><a href="/classes/{{id}}">Update</a></td>
         </tr> 
