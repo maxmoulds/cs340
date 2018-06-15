@@ -1,6 +1,6 @@
 <html>
 <h3>Give {{inventory.1.fname}} {{inventory.1.lname}} a new item</h3> <!-- Try to find out how to add the character's name -->
-<form id="giftitem" action="/character-inventory/:character_id" method="post">
+<form id="giftitem" action="/character-inventory/{{character_id}}" method="post">
     Character ID: <input type="number" name="character_id" value="{{inventory.1.character_id}}"><br>
     Item: <select name="name" input type="text">
          {{#each items}}

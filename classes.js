@@ -108,7 +108,7 @@ module.exports = function(){
   }); 
 
     router.post('/', function(req, res){
-        console.log(req.body.homeworld)
+        //console.log(req.body.homeworld)
         console.log(req.body)
         var mysql = req.app.get('mysql');
         var sql = "INSERT INTO `class` (id, subject, instructor, description) VALUES (?,?,?,?)";
