@@ -1,0 +1,36 @@
+<html>
+<h3>Give {{inventory.1.fname}} {{inventory.1.lname}} a new item</h3> <!-- Try to find out how to add the character's name -->
+<form id="giftitem" action="/character-inventory/:character_id" method="post">
+    Character ID: <input type="number" name="character_id" value="{{inventory.1.character_id}}"><br>
+    Item: <select name="name" input type="text">
+         {{#each items}}
+         <option value="{{name}}">{{name}}</option>
+         {{/each}} 
+   </select><br>
+    Quantity: <input type="number" name="amount_of"><br>
+    <input type="submit" value="Submit">
+ </form>
+<br/>
+<h3> List of {{inventory.1.fname}} {{inventory.1.lname}}'s current items </h3>
+<table>
+    <thead> 
+        <th>Item Name</th> 
+        <th>Quantity Owned</th>
+        <th>Description</th>
+    </thead> 
+    <tbody> 
+        {{#each inventory}} 
+        <tr>  
+            <td>{{name}}</td>
+            <td>{{amount_of}}</td>
+            <td>{{description}}</td> 
+            <td><button onclick="deleteInventory({{character_id}}, {{item_id}})">Delete</button></td>
+            <td><a href="/character-inventory/{{character_id}}/{{item_id}}">Update</a></td>
+        </tr>
+        {{else}}
+        <b> No items have been found! Create some. </b>
+        {{/each}} 
+
+    </tbody>
+</table> 
+</html>

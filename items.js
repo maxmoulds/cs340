@@ -251,7 +251,7 @@ module.exports = function(){
         }); 
     }); 
 
-
+    
   /* Delete a person's certification record */
   /* This route will accept a HTTP DELETE request in the form
    * /pid/{{pid}}/cert/{{cid}} -- which is sent by the AJAX form 

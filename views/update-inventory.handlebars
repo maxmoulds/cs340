@@ -1,0 +1,12 @@
+<html>
+<h1>Update {{inventory.1.fname}} {{inventory.1.lname}}'s {{item.name}}</h1>
+<form id="update-inventory" action="/character-inventory" method="post">
+    Amount of {{item.name}} they own:  <input type="number" name="amount_of" value="{{item.amount_of}}"><br>
+</form>
+<button onclick="updateCharacterInventory({{inventory.1.character_id}}, {{item_id}})">Update</button>
+</html>
+<!-- 
+	- character name 
+	- item name
+	- amount_of item
+-->

@@ -7,23 +7,3 @@
 </form>
 <button onclick="updateItem({{item.id}})">Update</button>
 </html>
-
-
-<!-- <html>
-<h1>Update {{character.fname}} {{character.lname}}:</h1>
-<form id="update-character" action="/character" method="post">
-    ID: <input type="text" name="id" value="{{character.id}}"><br>
-    First name: <input type="text" name="fname" value="{{character.fname}}"><br>
-    Last name: <input type="text" name="lname" value="{{character.lname}}"><br>
-    RoleID: <input type="text" name="role_id" value="{{character.role_id}}"><br>
-    Date of First Flesh Acquisition: <input type="text" name="dob" value="{{character.dob}}"><br>
-    HouseID: <select name="house_id" value="{{character.house_id}}">
-            {{#each all_house_ids}}
-            <option value="{{all_house_ids}}">{{house_id}}</option>
-            {{/each}}
-            </select><br>
-</form>
-<button onclick="updateCharacter({{character.id}})">Update</button>
-<script defer>selectPlanet({{character.house_id}});</script>
-</html>
- -->

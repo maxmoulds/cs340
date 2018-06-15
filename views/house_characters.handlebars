@@ -1,14 +1,4 @@
 <html>
-<h3>Show characters from a house:</h3>
-<form id="selecthouseid" action="/house/{{house_id}}" method="POST">
-    House ID: <select name="house_id"> 
-        {{#each character}}
-        <option value="{{house_id}}">{{house_id}}</option>
-        {{/each}}
-    </select><br>
-    <input type="submit" value="Show">
- </form>
-<br/>
 
 <h3>HOUSE INFO:</h3>
 <table>
@@ -27,12 +17,23 @@
             <td>{{color_primary}}</td> 
             <td>{{color_secondary}}</td>
             <td>{{points}}</td>
-            <td><button onclick="deleteCharacter({{id}})">Delete</button></td>
+            <td><button onclick="deleteHouse({{id}})">Delete</button></td>
             <td><a href="/character/{{id}}">Update</a></td>
         </tr> 
         {{/each}} 
     </tbody> 
 </table> 
+
+<h3>Show characters from a house:</h3>
+<form id="selecthouseid" action="/house/{{house_id}}" method="POST">
+    House ID: <select name="house_id"> 
+        {{#each character}}
+        <option value="{{house_id}}">{{house_id}}</option>
+        {{/each}}
+    </select><br>
+    <input type="submit" value="Show">
+ </form>
+<br/>
 
 <h3>Current character:</h3>
 <table>

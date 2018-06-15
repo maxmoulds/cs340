@@ -132,7 +132,6 @@ module.exports = function(){
 
     /* Display one person for the specific purpose of updating people */
 
-
     router.post('/', function(req, res){
         console.log(req.body.house_id)
         console.log(req.body)
